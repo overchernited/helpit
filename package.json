@@ -1,0 +1,35 @@
+{
+  "name": "helpit",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev --host",
+    "build": "vinxi build",
+    "start": "vinxi start"
+  },
+  "dependencies": {
+    "@solid-primitives/gestures": "^1.2.0",
+    "@solidjs/router": "^0.15.0",
+    "@solidjs/start": "^1.1.0",
+    "@supabase/supabase-js": "^2.57.4",
+    "@use-gesture/vanilla": "^10.3.1",
+    "nanoid": "^5.1.6",
+    "party-js": "^2.2.0",
+    "qrcode-generator": "^2.0.4",
+    "sass": "^1.92.1",
+    "solid-js": "^1.9.5",
+    "solid-motionone": "^1.0.4",
+    "solid-spinner": "^0.2.0",
+    "tailwind": "^4.0.0",
+    "tailwind-merge": "^3.3.1",
+    "unique-names-generator": "^4.7.1",
+    "vinxi": "^0.5.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.7",
+    "tailwindcss": "^4.0.7",
+    "vite": "^7.1.5"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

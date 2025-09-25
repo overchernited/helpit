@@ -1,0 +1,110 @@
+@use "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+
+body,
+html,
+#app {
+  min-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+* {
+  font-family: "K2D", sans-serif;
+}
+
+.post {
+  touch-action: pan-y;
+}
+
+//212121 <- Background Color for dark theme
+:root {
+  --color-primary: #ba5087;
+  --color-secondary: #393e41;
+  --color-tertiary: #61bdff;
+  --surface: #fff;
+  --surface-alt: #f1eef1;
+}
+
+.bg-gradient {
+  background: #f4d2ea;
+  background: -webkit-linear-gradient(
+    120deg,
+    rgb(247, 189, 231) 0%,
+    var(--surface) 50%,
+    rgb(141, 214, 235) 100%
+  );
+  background: -moz-linear-gradient(
+    120deg,
+    rgb(247, 189, 231) 0%,
+    var(--surface) 50%,
+    rgb(141, 214, 235) 100%
+  );
+  background: linear-gradient(
+    120deg,
+    rgb(247, 189, 231) 0%,
+    var(--surface) 50%,
+    rgb(141, 214, 235) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(
+  startColorstr="#F4D2EA",
+  endColorstr="#ABDCEA",
+  GradientType=0
+  );
+  background-size: 200% 200%;
+  animation: moveGradient 5s ease-in-out alternate infinite;
+}
+
+.button {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.steel-gradient {
+  background: linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(360deg, #393e41 0%, #929fa7 100%) border-box;
+  border: 2px solid transparent;
+}
+
+.text-palette-gradient {
+  background: linear-gradient(90deg, #ba5087, #61bdff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.palette-gradient {
+  background: linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(90deg, #ba5087 0%, #61bdff 100%) border-box;
+  border: 2px solid transparent;
+}
+
+.button.button-palette {
+  background: linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(360deg, #ba5087 0%, #61bdff 100%) border-box;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 20px #ba5087;
+  color: var(--color-primary) !important;
+}
+
+.button.button-steel {
+  background: linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(360deg, #393e41 0%, #929fa7 100%) border-box;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 20px #ba5087;
+  color: var(--color-secondary);
+}
+
+@keyframes moveGradient {
+  0% {
+    background-position: 0% 65%;
+  }
+  50% {
+    background-position: 100% 65%;
+  }
+  100% {
+    background-position: 0% 65%;
+  }
+}
