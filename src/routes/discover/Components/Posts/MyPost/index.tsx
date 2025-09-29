@@ -1,13 +1,20 @@
-import { authUser } from "~/auth/GetUser"
+import { authUser } from "~/user/UserHandler"
 import { Motion, Presence } from "solid-motionone";
 import { createSignal, Show, onCleanup, onMount } from "solid-js";
-import { twMerge } from "tailwind-merge";
 import Button from "~/components/Button";
 import { createEffect } from "solid-js";
+import supa from "~/lib/supabase";
+import { containsBadWords } from "~/lib/badwords";
+import { AddNotification } from "~/components/Notifications";
+import { giveXp } from "~/user/UserHandler";
 
 const MyPost = () => {
     const [isFocused, setIsFocused] = createSignal(false);
     const [visible, setVisible] = createSignal(true);
+
+    //Form State
+    const [text, setText] = createSignal("");
+    const [title, setTitle] = createSignal("");
 
     let ref: HTMLDivElement | undefined;
     const handleFocus = () => {
@@ -51,8 +58,66 @@ const MyPost = () => {
         console.log(visible());
     }, visible);
 
-    const handleClick = () => {
-        alert("click");
+
+    const uploadPostHandle = async () => {
+        try {
+            const { error } = await supa.from("posts").insert({
+                user_name: authUser()?.user_metadata.full_name,
+                avatar_url: authUser()?.user_metadata.avatar_url,
+                title: title(),
+                text: text(),
+            });
+            if (error) {
+                console.error(error);
+                return
+            }
+            setIsFocused(false)
+        }
+        catch (error) {
+            throw error
+            return
+        }
+    }
+
+    const updateProfileHandle = async () => {
+        try {
+            const { error: profileSelect, data } = await supa.from("posts").select("*").eq("user_id", authUser()?.id);
+            if (profileSelect) {
+                console.error(profileSelect);
+                return
+            }
+
+
+            const { error: profileUpdate } = await supa.from("profiles").update({
+                posts: data.length
+            }).eq("id", authUser()?.id)
+                .select();
+            if (profileUpdate) {
+                console.error(profileUpdate);
+                return
+            }
+        }
+        catch (error) {
+            throw error
+            return
+        }
+    }
+
+    const handleSubmit = async (e: Event) => {
+        e.preventDefault()
+        const badword = containsBadWords(text()) || containsBadWords(title())
+        if (badword) {
+            AddNotification({ message: "No vuelvas a hacer eso.", title: "Advertencia", type: "error", duration: 5000 })
+            return
+        }
+        await uploadPostHandle()
+        setText("")
+        setTitle("")
+        await giveXp(10)
+        await updateProfileHandle()
+        setIsFocused(false)
+
+
     };
 
     return (
@@ -64,7 +129,7 @@ const MyPost = () => {
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.2, opacity: 0 }}
                     transition={{ duration: 0.3, easing: [0.34, 1.56, 0.64, 1] }}
-                    class="fixed h-screen w-screen top-0 left-0 backdrop-blur-md bg-black/5 z-50 touch-pan-x"
+                    class="fixed h-screen w-screen top-0 left-0 backdrop-blur-md bg-black/5 z-[500] touch-pan-x"
                 />
             </Show>
             <Motion.div
@@ -76,13 +141,14 @@ const MyPost = () => {
                 transition={{ duration: 0.6, easing: [0.34, 1.56, 0.64, 1] }}
                 style={{ "transform-origin": "top center" }}
                 id="myPost"
-                class="w-full h-[20vh] z-[200] flex-col flex justify-center items-center touch-pan-x"
+
+                class="w-full h-[20vh] z-[500] flex-col flex justify-center items-center touch-pan-x"
             >
                 <div
                     ref={ref}
                     class="w-full h-full palette-gradient rounded-3xl px-4 my-5 flex flex-row justify-center gap-5 shadow-xl shadow-zinc-400 touch-pan-x"
                 >
-                    <form class="flex flex-col h-full w-full">
+                    <form class="flex flex-col h-full w-full" onsubmit={handleSubmit}>
                         <section class="flex flex-row justify-center items-center">
                             <article class="flex flex-col justify-center items-center">
                                 <img
@@ -90,12 +156,14 @@ const MyPost = () => {
                                     class="w-16 h-16 rounded-full mt-5"
                                     alt="user avatar"
                                 />
-                                <p class="font-bold text-[var(--color-secondary)]">{authUser()?.user_metadata.full_name}</p>
+                                <p class="font-bold w-full truncate text-[var(--color-secondary)]">{authUser()?.user_metadata.full_name}</p>
                             </article>
                             <input
                                 type="text"
                                 onFocus={handleFocus}
                                 onBlur={handleBlur}
+                                value={title()}
+                                onInput={(e) => setTitle(e.currentTarget.value)}
                                 class="bg-transparent outline-0 font-bold text-xl w-full"
                                 placeholder="¿En que piensas?"
                             />
@@ -103,26 +171,24 @@ const MyPost = () => {
                         <textarea
                             onFocus={handleFocus}
                             onBlur={handleBlur}
+                            value={text()}
+                            onInput={(e) => setText(e.currentTarget.value)}
                             class="bg-transparent outline-0 font-medium resize-none h-full"
                             placeholder="Escríbelo"
                         />
+                        <div class="text-center m-2">
+                            <Show when={isFocused()}>
+                                <Button
+                                    type="submit"
+                                    btnStyle="button-palette"
+                                    class="w-[35%] text-xl"
+                                >Crear</Button>
+                            </Show>
+                        </div>
                     </form>
 
                 </div>
-                <Show when={isFocused()}>
-                    <Button
-                        btnStyle="button-palette"
-                        className={"w-[35%] text-xl"}
-                        onclick={handleClick}
-                    >Crear</Button>
-                </Show>
             </Motion.div >
-            {/* <Presence exitBeforeEnter>
-                <Show when={!visible()} keyed>
-
-                    <Button btnStyle="button-palette" onclick={handleScroll} className="fixed bottom-5 left-1/2 -translate-x-1/2 p-2 w-12 h-12 rounded-full! z-[50]"><i class="fa-solid fa-plus"></i></Button>
-                </Show>
-            </Presence> */}
         </>
     );
 };
