@@ -1,5 +1,5 @@
 import { JSX, onMount, Show } from "solid-js";
-import { authUser, loadingUser } from "~/auth/GetUser"
+import { authUser, loadingUser } from "~/user/UserHandler"
 import Loading from "./Loading";
 import { createEffect } from "solid-js";
 
@@ -9,8 +9,9 @@ interface Props {
 }
 
 const Private = (props: Props) => {
-    // efecto reactivo: corre cada vez que cambian los signals
+
     createEffect(() => {
+        console.log(authUser(), loadingUser())
         if (!loadingUser() && !authUser()) {
             window.location.href = props.endpoint;
         }
@@ -25,6 +26,7 @@ const Private = (props: Props) => {
 
 export const Public = (props: Props) => {
     createEffect(() => {
+        console.log(authUser(), loadingUser())
         if (!loadingUser() && authUser()) {
             window.location.href = props.endpoint;
         }
