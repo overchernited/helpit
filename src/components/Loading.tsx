@@ -6,7 +6,7 @@ const Spinner = lazy(() =>
 );
 
 const Loading = () => (
-    <div class="flex flex-col items-center justify-center h-screen w-full fixed z-[2000]">
+    <div class="flex flex-col items-center justify-center h-screen w-full absolute z-[5000]">
         <img src={brand} width={400} height={400} alt="logo" />
         <Spinner color="#ba5087" height={100} width={100} />
     </div>
