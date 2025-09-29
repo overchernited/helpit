@@ -1,0 +1,47 @@
+import { modal, closeModal } from "~/store/modal";
+import { Show, onMount, onCleanup } from "solid-js";
+import { Motion, Presence } from "solid-motionone";
+import { twMerge } from "tailwind-merge";
+
+const Modal = () => {
+
+    onMount(() => {
+        const handlePopState = (event: PopStateEvent) => {
+            if (modal().isOpen) {
+                closeModal();
+            }
+        };
+
+        window.addEventListener("popstate", handlePopState);
+        onCleanup(() => window.removeEventListener("popstate", handlePopState));
+    });
+
+    return (
+        <Presence>
+            <Show when={modal().isOpen}>
+                <Motion.div
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        modal().closeOnForegroundClick && closeModal();
+                    }}
+                    class={twMerge(
+                        "fixed z-[1000] bg-white/5 backdrop-blur-md w-screen h-screen flex justify-center items-center"
+                    )}
+                >
+                    <Motion.div
+                        onclick={(e) => e.stopPropagation()}
+                        initial={modal().initial}
+                        animate={modal().animate}
+                        exit={modal().exit}
+                        transition={{ duration: 0.3 }}
+                        class="w-full md:w-6/12 h-10/12 bg-[var(--color-primary)] rounded-3xl shadow-2xl shadow-zinc-800 p-4"
+                    >
+                        {modal().content?.()}
+                    </Motion.div>
+                </Motion.div>
+            </Show>
+        </Presence>
+    );
+};
+
+export default Modal;
