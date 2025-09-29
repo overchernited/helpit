@@ -12,6 +12,7 @@
     "@solidjs/start": "^1.1.0",
     "@supabase/supabase-js": "^2.57.4",
     "@use-gesture/vanilla": "^10.3.1",
+    "bad-words": "^4.0.0",
     "nanoid": "^5.1.6",
     "party-js": "^2.2.0",
     "qrcode-generator": "^2.0.4",
