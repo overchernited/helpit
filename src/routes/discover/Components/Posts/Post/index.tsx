@@ -1,53 +1,102 @@
 import { Motion } from "solid-motionone"
-import { createSignal, onCleanup, onMount, Show } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js"
 import party from "party-js";
 import { twMerge } from "tailwind-merge";
 import { JSX } from "solid-js";
+import supa from "~/lib/supabase";
+import { authUser, giveXp } from "~/user/UserHandler";
+import { modal, openModal, setModal } from "~/store/modal";
+import ExpandedParagraph from "../ExpandedParagraph";
+import ExpandedPost from "./expandedpost";
 
 
 
 type Props = {
-    onSwipeLeft?: () => void;
-    onSwipeRight?: () => void;
+    avatar_url: string,
+    user_name: string,
+    text: string,
+    title: string,
+    id: string
+    user_id: string
 };
 
-const ExpandedParagraph = (props: { children: JSX.Element }) => {
-    const [collapsed, setCollapsed] = createSignal(true);
-    const [isClamped, setIsClamped] = createSignal(false);
 
-    let textRef!: HTMLParagraphElement;
-
-    onMount(() => {
-        if (textRef.scrollHeight > textRef.clientHeight) {
-            setIsClamped(true);
-        }
-    });
-
-    return (
-        <>
-            <p class={collapsed() ? "overflow-hidden text-ellipsis line-clamp-3" : ""} ref={textRef}>{props.children}</p>
-            <Show when={isClamped()} fallback={<></>}>
-                <button class="underline cursor-pointer"
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onTouchStart={(e) => e.stopPropagation()}
-                    onclick={(e) => {
-                        e.stopPropagation(); // <- evita que el swipe del padre interfiera
-                        setCollapsed(!collapsed());
-                    }}>Leer {collapsed() ? "más" : "menos"}</button>
-            </Show>
-        </>
-    )
-}
 
 const Post = (props: Props) => {
     const [visible, setVisible] = createSignal(false);
     const [heart, setHeart] = createSignal(false);
-    const [comment, setComment] = createSignal(false);
+    const [comments, setComments] = createSignal(0);
+
+    const [reactiveHearts, setReactiveHearts] = createSignal(0);
+    const [processing, setProcessing] = createSignal(false)
+
     const [dir, setDir] = createSignal<string>("");
+
+
+    //SWIPE SHORTCUT
+    let swipeActive = false;
+    let pointerStartedOnInteractive = false;
+    let startX = 0;
+    let startY = 0;
+    let isSwiping = false;
+    let startTime = 0;
+
+    const MIN_SWIPE_DISTANCE = 80;
+
 
     let ref!: HTMLDivElement;
     let cardRef!: HTMLDivElement;
     let BtnRef: HTMLButtonElement | undefined;
+
+    const isInteractiveElement = (el: EventTarget | null) => {
+        if (!(el instanceof HTMLElement)) return false;
+        return ["BUTTON", "A", "INPUT", "TEXTAREA"].includes(el.tagName);
+    };
+
+    const handlePointerDown = (e: PointerEvent) => {
+        pointerStartedOnInteractive = isInteractiveElement(e.target);
+        if (pointerStartedOnInteractive) return;
+        startX = e.clientX;
+        startY = e.clientY;
+        startTime = Date.now();
+        isSwiping = false;
+        (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
+    };
+
+
+    const handlePointerMove = (e: PointerEvent) => {
+        if (isInteractiveElement(e.target)) {
+            isSwiping = false;
+            swipeActive = false;
+            return;
+        }
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+
+        if (!isSwiping && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+            isSwiping = true;
+            swipeActive = true;
+        }
+    };
+
+    const handlePointerUp = (e: PointerEvent) => {
+        if (pointerStartedOnInteractive) {
+            pointerStartedOnInteractive = false;
+            return;
+        }
+
+        if (!isSwiping) return;
+
+        const deltaX = e.clientX - startX;
+        if (deltaX < -MIN_SWIPE_DISTANCE) {
+            if (processing()) return
+            setDir("left");
+            handleHeart();
+        }
+
+        setTimeout(() => setDir(""), 200);
+        setTimeout(() => swipeActive = false, 300);
+    };
 
     const throwConfetti = () => {
         if (BtnRef) {
@@ -60,6 +109,8 @@ const Post = (props: Props) => {
     };
 
     onMount(() => {
+
+
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -74,76 +125,130 @@ const Post = (props: Props) => {
 
         if (ref) observer.observe(ref);
         onCleanup(() => observer.disconnect());
+
+
     });
 
-    const handleHeart = () => {
-        setHeart(prev => {
-            const newState = !prev;
-            if (newState) {
-                throwConfetti();
+
+    const handleCloudHeart = {
+        async plus() {
+            try {
+                setProcessing(true);
+                setReactiveHearts(prev => prev + 1);
+                await giveXp(10)
+                const { data, error } = await supa.from("hearts").insert({
+                    post_id: props.id,
+                    owner_id: props.user_id,
+                })
+
+
+            } catch (err) {
+                console.error("Error inesperado:", err);
             }
-            return newState;
-        });
-    };
+            finally {
+                setProcessing(false);
+            }
+        },
 
-    const handleComment = () => { }
+        async minus() {
+            try {
 
-    let startX = 0;
-    let startY = 0;
-    let endX = 0;
-    let endY = 0;
-    let isSwiping = false;
-    let startTime = 0;
+                setReactiveHearts(prev => prev - 1);
+                const { data, error } = await supa.from("hearts").delete().eq("post_id", props.id).eq("id", authUser()?.id)
 
-    const MIN_SWIPE_DISTANCE = 80; // más alto para evitar falsos positivos
-    const MIN_SWIPE_TIME = 120;    // ms
+                if (error) {
+                    console.error(error);
+                    return;
+                }
 
-    const isInteractiveElement = (el: EventTarget | null) => {
-        if (!(el instanceof HTMLElement)) return false;
-        return ["BUTTON", "A", "INPUT", "TEXTAREA"].includes(el.tagName);
-    };
 
-    const handlePointerDown = (e: PointerEvent) => {
-        if (isInteractiveElement(e.target)) return; // no empezar swipe en botones
-        startX = e.clientX;
-        startY = e.clientY;
-        startTime = Date.now();
-        isSwiping = false;
-        const target = e.currentTarget as HTMLDivElement;
-        target.setPointerCapture(e.pointerId);
-    };
-
-    const handlePointerMove = (e: PointerEvent) => {
-        endX = e.clientX;
-        endY = e.clientY;
-
-        const deltaX = endX - startX;
-        const deltaY = endY - startY;
-
-        // Solo marcar swipe si es claramente horizontal
-        if (!isSwiping && Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
-            isSwiping = true;
+            } catch (err) {
+                console.error("Error inesperado:", err);
+            }
+            finally {
+                setProcessing(false);
+            }
         }
     };
 
-    const handlePointerUp = (e: PointerEvent) => {
-        if (!isSwiping) return;
+    const handleHeart = async () => {
+        if (processing()) return;
+        setProcessing(true);
 
-        // Evitar swipe si el pointerUp fue sobre un botón/link
-        if (isInteractiveElement(e.target)) return;
+        try {
 
-        const deltaX = endX - startX;
-        const elapsed = Date.now() - startTime;
-
-        if (elapsed < MIN_SWIPE_TIME) return;
-
-        if (deltaX < -MIN_SWIPE_DISTANCE) {
-            setDir("left");
-            handleHeart();
+            setHeart(prev => {
+                const newState = !prev;
+                if (newState) {
+                    throwConfetti();
+                    handleCloudHeart.plus()
+                } else {
+                    handleCloudHeart.minus();
+                }
+                return newState;
+            });
+        } catch (err) {
+            console.error(err);
         }
-
-        setTimeout(() => setDir(""), 200);
     };
+
+    const handleComment = () => {
+        openModal({ content: () => <ExpandedPost {...props} /> })
+    }
+
+    const getComments = async () => {
+        try {
+            const { error, data } = await supa.from("comments").select("*").eq("post_id", props.id)
+            if (error) {
+                console.log(error)
+                return
+            }
+            setComments(data.length)
+        } catch (error) {
+            throw error
+            console.log(error)
+        }
+    }
+
+    const getHearts = async () => {
+        try {
+            const { error, data } = await supa.from("hearts").select("*").eq("post_id", props.id)
+            if (error) {
+                console.log(error)
+                return
+            }
+            setReactiveHearts(data.length)
+        }
+        catch (error) {
+            throw error
+            console.log(error)
+        }
+    }
+
+    const getState = async () => {
+        try {
+            const { error, data } = await supa.from("hearts").select("*").eq("id", authUser()?.id).eq("post_id", props.id)
+            if (error) {
+                console.log(error)
+                return
+            }
+            console.log(data)
+
+            if (data.length > 0) {
+                setHeart(true)
+            }
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
+    onMount(async () => {
+        await getState()
+        await getComments()
+        await getHearts()
+    })
+
 
     return (
         <Motion.div
@@ -154,18 +259,15 @@ const Post = (props: Props) => {
                 scale: visible() ? 1 : 0.5,
                 y: visible() ? 0 : 50,
             }}
-            transition={{ duration: 0.6, easing: [0.34, 1.56, 0.64, 1] }}
-            class="w-full h-auto flex-row flex justify-center items-center"
-        >
-
+            class="shadow-xl w-full palette-gradient shadow-zinc-400 rounded-md bg-[--surface-alt] flex flex-col items-center ">
             <div
                 ref={cardRef}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 class={twMerge(
-                    "w-full palette-gradient rounded-md flex flex-row justify-center gap-5 shadow-xl shadow-zinc-400 transition-all touch-pan-y select-none",
-                    dir() === "left" ? "-translate-x-50" : dir() === "right" ? "" : ""
+                    "w-full rounded-md bg-[var(--surface)] flex flex-row justify-center gap-5  transition-all touch-pan-y select-none",
+                    dir() === "left" ? "-translate-x-50" : "translate-x-0",
                 )}
             >
 
@@ -176,49 +278,58 @@ const Post = (props: Props) => {
                             <article class="flex flex-row items-center gap-5">
                                 <section class="flex flex-col justify-center items-center">
                                     <img
-                                        src="/avatars/avatar1.jpg"
+                                        onPointerDown={
+                                            (e) => {
+                                                e.preventDefault();
+                                                window.location.href = `/users/${props.user_id}`
+                                            }
+                                        }
+                                        src={props.avatar_url}
                                         alt=""
-                                        class="rounded-full w-16 h-16"
+                                        class="rounded-full w-16 h-16 cursor-pointer"
                                     />
-                                    <p class="font-bold text-[var(--color-secondary)]">fastduck98</p>
+                                    <p class="font-bold text-[var(--color-secondary)]">{props.user_name}</p>
                                 </section>
-                                <h1 class="font-bold text-2xl w-full">Soy un titulo!</h1>
+                                <h1 class="font-extrabold text-2xl w-full">{props.title}</h1>
                             </article>
-                            <ExpandedParagraph>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat magnam quos autem! Cum sunt libero nobis perferendis hic, commodi, explicabo similique minus ullam quae adipisci, fuga optio perspiciatis iusto unde. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod ullam similique distinctio fugit inventore rem, perspiciatis nostrum aut minima assumenda, totam iusto laborum nobis dolore! Architecto mollitia harum recusandae omnis?</ExpandedParagraph>
+                            <ExpandedParagraph>{props.text}</ExpandedParagraph>
                         </section>
 
                     </article>
 
-                    <section class="flex justify-center items-center gap-5 w-[95%] m-auto text-xl border-t-2 border-[var(--surface-alt)] p-2">
-                        <Motion.button
-                            ref={BtnRef}
-                            animate={heart() ? { scale: [0.5, 1], color: "red" } : { color: "var(--color-secondary)" }}
-                            transition={{ duration: 0.3, easing: [0.34, 1.56, 0.64, 1] }}
-                            class="flex items-center gap-2 cursor-pointer"
-                            onPointerDown={(e) => e.stopPropagation()}
-                            onTouchStart={(e) => e.stopPropagation()}
-                            onclick={(e) => {
-                                e.stopPropagation();
-                                handleHeart();
-                            }}>
-                            <i class={heart() ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
-                            <span>0</span>
-                        </Motion.button>
-                        <button class="flex items-center gap-2 cursor-pointer" onclick={handleComment}>
-                            <i class="fa-regular fa-comment"></i>
-                            <span>0</span>
-                        </button>
-                    </section>
                 </main>
 
-                <Motion.aside
-                    initial={{ width: 0, visibility: "hidden" }}
-                    animate={dir() === "left" ? { width: "30%", visibility: "visible" } : { width: 0, visibility: "hidden" }}
-                    transition={{ duration: 0.3 }}
-                    class={"flex flex-col text-2xl justify-center right-0 h-full absolute items-center bg-red-600 text-white rounded-r-md xl"} >
-                    <i class="fa-solid fa-heart"></i>
-                </Motion.aside>
             </div>
+            <Motion.aside
+                initial={{ width: 0 }}
+                animate={dir() === "left" ? { width: "30%" } : { width: 0 }}
+                transition={{ duration: 0.3 }}
+                class={"flex flex-col text-2xl justify-center right-0 h-full absolute items-center bg-red-600 text-white rounded-r-md xl"} >
+                <Motion.i
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={dir() === "left" ? { opacity: 1 } : { opacity: 0 }}
+                    class="fa-solid fa-heart"></Motion.i>
+            </Motion.aside>
+            <section class="flex flex-row justify-center items-center gap-5 w-full h-5  text-xl shadow-2xl p-5">
+                <Motion.button
+                    ref={BtnRef}
+                    animate={heart() ? { scale: [0.5, 1], color: "red" } : { color: "var(--color-secondary)" }}
+                    transition={{ duration: 0.3, easing: [0.34, 1.56, 0.64, 1] }}
+                    class="flex items-center gap-2 cursor-pointer"
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        handleHeart();
+                    }}>
+                    <i class={heart() ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
+                    <span>{reactiveHearts()}</span>
+                </Motion.button>
+                <button class="flex items-center gap-2 cursor-pointer" onclick={handleComment}>
+                    <i class="fa-regular fa-comment"></i>
+                    <span>{comments()}</span>
+                </button>
+            </section>
         </Motion.div >
     );
 };
