@@ -23,7 +23,7 @@ html,
   --color-secondary: #393e41;
   --color-tertiary: #61bdff;
   --surface: #fff;
-  --surface-alt: #f1eef1;
+  --surface-alt: #e2dde2;
 }
 
 .bg-gradient {
@@ -107,4 +107,14 @@ html,
   100% {
     background-position: 0% 65%;
   }
+}
+
+.success {
+  background-color: #ba5087;
+  color: #fff;
+}
+
+.error {
+  background-color: #ba5050;
+  color: #fff;
 }
