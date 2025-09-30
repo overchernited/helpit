@@ -1,4 +1,5 @@
 dist
+supabase
 .wrangler
 .output
 .vercel
