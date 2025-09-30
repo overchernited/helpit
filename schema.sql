@@ -1,0 +1,481 @@
+
+
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+
+COMMENT ON SCHEMA "public" IS 'standard public schema';
+
+
+
+CREATE EXTENSION IF NOT EXISTS "pg_graphql" WITH SCHEMA "graphql";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "pg_stat_statements" WITH SCHEMA "extensions";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "pgcrypto" WITH SCHEMA "extensions";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "supabase_vault" WITH SCHEMA "vault";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
+
+
+
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = "heap";
+
+
+CREATE TABLE IF NOT EXISTS "public"."comments" (
+    "post_id" "uuid" NOT NULL,
+    "comment_id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "comment" "text",
+    "user_name" "text",
+    "avatar_url" "text",
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE "public"."comments" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."comments" IS 'Helpit users comments';
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."hearts" (
+    "id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "owner_id" "uuid" NOT NULL,
+    "post_id" "uuid",
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE "public"."hearts" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."hearts" IS 'the user hearts of helpit posts';
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."posts" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "user_name" "text",
+    "avatar_url" "text",
+    "title" "text",
+    "text" "text",
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "category" "text"
+);
+
+
+ALTER TABLE "public"."posts" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."posts" IS 'Helpit users posts';
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."profiles" (
+    "id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "full_name" "text",
+    "level" smallint DEFAULT '1'::smallint,
+    "achievments" "jsonb",
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "avatar_url" "text",
+    "xp" bigint DEFAULT '0'::bigint
+);
+
+
+ALTER TABLE "public"."profiles" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."profiles" IS 'Helpit profiles of users';
+
+
+
+ALTER TABLE ONLY "public"."comments"
+    ADD CONSTRAINT "comments_pkey" PRIMARY KEY ("comment_id");
+
+
+
+ALTER TABLE ONLY "public"."hearts"
+    ADD CONSTRAINT "hearts_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."posts"
+    ADD CONSTRAINT "posts_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."profiles"
+    ADD CONSTRAINT "profiles_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."comments"
+    ADD CONSTRAINT "comments_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "public"."posts"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."hearts"
+    ADD CONSTRAINT "hearts_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "public"."posts"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."posts"
+    ADD CONSTRAINT "posts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE CASCADE;
+
+
+
+CREATE POLICY "Enable delete for users based on user_id" ON "public"."hearts" FOR DELETE TO "authenticated" USING ((( SELECT "auth"."uid"() AS "uid") = "id"));
+
+
+
+CREATE POLICY "Enable insert for authenticated users only" ON "public"."comments" FOR INSERT TO "authenticated" WITH CHECK (true);
+
+
+
+CREATE POLICY "Enable insert for authenticated users only" ON "public"."hearts" FOR INSERT TO "authenticated" WITH CHECK (true);
+
+
+
+CREATE POLICY "Enable insert for authenticated users only" ON "public"."posts" FOR INSERT TO "authenticated" WITH CHECK (true);
+
+
+
+CREATE POLICY "Enable insert for users based on user_id" ON "public"."profiles" FOR INSERT WITH CHECK ((( SELECT "auth"."uid"() AS "uid") = "id"));
+
+
+
+CREATE POLICY "Enable read access for auth users" ON "public"."posts" FOR SELECT TO "authenticated" USING (true);
+
+
+
+CREATE POLICY "Enable read access for auth users" ON "public"."profiles" FOR SELECT TO "authenticated" USING (true);
+
+
+
+CREATE POLICY "Enable read access for authenticated users" ON "public"."comments" FOR SELECT TO "authenticated" USING (true);
+
+
+
+CREATE POLICY "Select for authenticated users" ON "public"."hearts" FOR SELECT TO "authenticated" USING (true);
+
+
+
+CREATE POLICY "Update own auth id users" ON "public"."profiles" FOR UPDATE TO "authenticated" USING (("auth"."uid"() = "id"));
+
+
+
+ALTER TABLE "public"."comments" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."hearts" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."posts" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."profiles" ENABLE ROW LEVEL SECURITY;
+
+
+
+
+ALTER PUBLICATION "supabase_realtime" OWNER TO "postgres";
+
+
+ALTER PUBLICATION "supabase_realtime" ADD TABLE ONLY "public"."profiles";
+
+
+
+GRANT USAGE ON SCHEMA "public" TO "postgres";
+GRANT USAGE ON SCHEMA "public" TO "anon";
+GRANT USAGE ON SCHEMA "public" TO "authenticated";
+GRANT USAGE ON SCHEMA "public" TO "service_role";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GRANT ALL ON TABLE "public"."comments" TO "anon";
+GRANT ALL ON TABLE "public"."comments" TO "authenticated";
+GRANT ALL ON TABLE "public"."comments" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."hearts" TO "anon";
+GRANT ALL ON TABLE "public"."hearts" TO "authenticated";
+GRANT ALL ON TABLE "public"."hearts" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."posts" TO "anon";
+GRANT ALL ON TABLE "public"."posts" TO "authenticated";
+GRANT ALL ON TABLE "public"."posts" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."profiles" TO "anon";
+GRANT ALL ON TABLE "public"."profiles" TO "authenticated";
+GRANT ALL ON TABLE "public"."profiles" TO "service_role";
+
+
+
+
+
+
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "service_role";
+
+
+
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "service_role";
+
+
+
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "service_role";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RESET ALL;
