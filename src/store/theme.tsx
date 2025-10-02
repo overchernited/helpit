@@ -1,5 +1,5 @@
 import { onMount, createSignal, createEffect } from "solid-js"
-export const [theme, setTheme] = createSignal('dark');
+export const [theme, setTheme] = createSignal('light');
 
 
 
