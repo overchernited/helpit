@@ -6,7 +6,7 @@ interface Props {
   placeholder?: string;
   type?: string;
   class?: string;
-  value: () => string;        // getter del value
+  value: () => string;
   onInput: (val: string) => void;
 }
 
@@ -22,8 +22,8 @@ const Input = (props: Props): JSX.Element => {
       <input
         type={props.type || "text"}
         placeholder={props.placeholder || ""}
-        class="palette-gradient p-2 rounded-md w-full outline-none font-medium"
-        value={props.value()}      // valor desde getter
+        class="palette-gradient p-2 rounded-md w-full outline-none font-medium text-[var(--font-color-alt)]"
+        value={props.value()}
         onInput={(e) => props.onInput(e.currentTarget.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}

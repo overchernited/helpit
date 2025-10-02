@@ -20,14 +20,21 @@ type CommentProps = {
 
 
 const ExpandedPost = (props: PostProps) => {
+
+
     const { title, ...restProps } = props;
+
+    const length = props.title.length
+
+    let fontSize = Math.max(12, 24 - length * 0.1);
+
     return (
-        <main class="flex flex-col w-full h-full  justify-center items-center">
+        <main class="flex flex-col w-full h-full justify-center items-center text-[var(--font-color-alt-2)]">
             <div
-                class="m-2 w-[90%] palette-gradient rounded-md bg-[--surface-alt] flex flex-col items-center ">
+                class="m-2 w-[90%] palette-gradient rounded-md flex flex-col items-center ">
                 <div
                     class=
-                    "w-full rounded-md bg-[var(--surface)] flex flex-row justify-center gap-5 transition-all"
+                    "w-full rounded-md flex flex-row justify-center gap-5 transition-all"
                 >
 
                     <main class="flex flex-col w-full relative">
@@ -39,11 +46,12 @@ const ExpandedPost = (props: PostProps) => {
                                         <img
                                             src={props.avatar_url}
                                             alt=""
+                                            onpointerdown={() => { window.location.href = `/users/${props.user_id}` }}
                                             class="rounded-full w-16 h-16 cursor-pointer"
                                         />
-                                        <p class="font-bold text-[var(--color-secondary)]">{props.user_name}</p>
+                                        <p class="font-bold w-[95%] text-xs break-all">{props.user_name}</p>
                                     </section>
-                                    <h1 class="font-extrabold text-2xl w-full">{props.title}</h1>
+                                    <h1 style={{ "font-size": `${fontSize}px` }} class="font-extrabold w-full">{props.title}</h1>
                                 </article>
                                 <ExpandedParagraph>{props.text}</ExpandedParagraph>
                             </section>
@@ -55,7 +63,7 @@ const ExpandedPost = (props: PostProps) => {
                 </div>
             </div>
 
-            <h1 class="text-3xl font-bold text-[var(--surface)]">Comentarios</h1>
+            <h1 class="text-3xl font-bold">Comentarios</h1>
             <CommentLoader post_id={props.id} />
         </main >
     )

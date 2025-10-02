@@ -12,9 +12,6 @@ interface LevelCardProps {
 }
 
 const LevelCard = (props: LevelCardProps) => {
-    onMount(() => {
-        console.log("Level", + authUser()?.user_metadata.level)
-    })
 
     return (
         <Show when={authUser()}>
@@ -25,7 +22,7 @@ const LevelCard = (props: LevelCardProps) => {
                 transition={{
                     duration: 0.5
                 }}
-                class={twMerge("flex items-center rounded-2xl text-[var(--surface)] p-2 flex-col w-96 h-[24rem] my-2", authUser()?.user_metadata.level >= props.minLVL ? "grayscale-0" : "grayscale-100")}>
+                class={twMerge("flex items-center rounded-2xl text-[var(--font-color)] p-2 flex-col w-96 h-[24rem] my-2", authUser()?.user_metadata.level >= props.minLVL ? "grayscale-0" : "grayscale-100")}>
                 < img alt="Level Banner" class="rounded-2xl" src="https://external-preview.redd.it/i-hired-an-artist-to-make-steam-capsule-and-im-amazed-by-v0-2UJxpu3RxK0tUljIQJ9e2wi0nT50rEGBeNCvMM1qs-g.jpg?auto=webp&s=dfc40aeef2dfd55d23075613ead3e3acd7be54cc" />
                 <article class="flex flex-col justify-center items-center">
                     <section class="flex flex-row items-center text-center w-full h-full">

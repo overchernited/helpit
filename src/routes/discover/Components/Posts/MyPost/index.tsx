@@ -7,6 +7,7 @@ import supa from "~/lib/supabase";
 import { containsBadWords } from "~/lib/badwords";
 import { AddNotification } from "~/components/Notifications";
 import { giveXp } from "~/user/UserHandler";
+import { category } from "../Categories";
 
 const MyPost = () => {
     const [isFocused, setIsFocused] = createSignal(false);
@@ -54,16 +55,12 @@ const MyPost = () => {
         onCleanup(() => observer.disconnect());
     });
 
-    createEffect(() => {
-        console.log(visible());
-    }, visible);
-
-
     const uploadPostHandle = async () => {
         try {
             const { error } = await supa.from("posts").insert({
                 user_name: authUser()?.user_metadata.full_name,
                 avatar_url: authUser()?.user_metadata.avatar_url,
+                category: category(),
                 title: title(),
                 text: text(),
             });
@@ -79,30 +76,6 @@ const MyPost = () => {
         }
     }
 
-    const updateProfileHandle = async () => {
-        try {
-            const { error: profileSelect, data } = await supa.from("posts").select("*").eq("user_id", authUser()?.id);
-            if (profileSelect) {
-                console.error(profileSelect);
-                return
-            }
-
-
-            const { error: profileUpdate } = await supa.from("profiles").update({
-                posts: data.length
-            }).eq("id", authUser()?.id)
-                .select();
-            if (profileUpdate) {
-                console.error(profileUpdate);
-                return
-            }
-        }
-        catch (error) {
-            throw error
-            return
-        }
-    }
-
     const handleSubmit = async (e: Event) => {
         e.preventDefault()
         const badword = containsBadWords(text()) || containsBadWords(title())
@@ -110,11 +83,17 @@ const MyPost = () => {
             AddNotification({ message: "No vuelvas a hacer eso.", title: "Advertencia", type: "error", duration: 5000 })
             return
         }
+
+        if (!text() || !title()) {
+            AddNotification({ message: "No puedes dejar campos vacios", title: "Oops!", type: "error", duration: 3000 })
+            return
+        }
+
+
         await uploadPostHandle()
         setText("")
         setTitle("")
         await giveXp(10)
-        await updateProfileHandle()
         setIsFocused(false)
 
 
@@ -129,7 +108,7 @@ const MyPost = () => {
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.2, opacity: 0 }}
                     transition={{ duration: 0.3, easing: [0.34, 1.56, 0.64, 1] }}
-                    class="fixed h-screen w-screen top-0 left-0 backdrop-blur-md bg-black/5 z-[500] touch-pan-x"
+                    class="fixed h-screen w-screen top-0 left-0 backdrop-blur-md bg-black/5 z-[500] touch-pan-x overflow-hidden"
                 />
             </Show>
             <Motion.div
@@ -142,13 +121,13 @@ const MyPost = () => {
                 style={{ "transform-origin": "top center" }}
                 id="myPost"
 
-                class="w-full h-[20vh] z-[500] flex-col flex justify-center items-center touch-pan-x"
+                class="w-full h-[20vh] z-[500] flex-col flex justify-center items-center touch-pan-x text-[var(--font-color-alt-2)]"
             >
                 <div
                     ref={ref}
-                    class="w-full h-full palette-gradient rounded-3xl px-4 my-5 flex flex-row justify-center gap-5 shadow-xl shadow-zinc-400 touch-pan-x"
+                    class="w-full h-full palette-gradient rounded-3xl px-4 my-5 flex flex-row justify-center gap-5 shadow-lg shadow-[color:var(--color-primary)] touch-pan-x"
                 >
-                    <form class="flex flex-col h-full w-full" onsubmit={handleSubmit}>
+                    <form class="flex flex-col h-full w-full" onsubmit={handleSubmit} onkeydown={(e) => e.key === "Enter" && e.preventDefault()}>
                         <section class="flex flex-row justify-center items-center">
                             <article class="flex flex-col justify-center items-center">
                                 <img
@@ -156,7 +135,7 @@ const MyPost = () => {
                                     class="w-16 h-16 rounded-full mt-5"
                                     alt="user avatar"
                                 />
-                                <p class="font-bold w-full truncate text-[var(--color-secondary)]">{authUser()?.user_metadata.full_name}</p>
+                                <p class="font-bold w-full truncate">{authUser()?.user_metadata.full_name}</p>
                             </article>
                             <input
                                 type="text"
@@ -174,7 +153,7 @@ const MyPost = () => {
                             value={text()}
                             onInput={(e) => setText(e.currentTarget.value)}
                             class="bg-transparent outline-0 font-medium resize-none h-full"
-                            placeholder="Escríbelo"
+                            placeholder={`Escríbe algo para ${category()}`}
                         />
                         <div class="text-center m-2">
                             <Show when={isFocused()}>

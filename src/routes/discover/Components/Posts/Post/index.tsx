@@ -16,7 +16,8 @@ type Props = {
     user_name: string,
     text: string,
     title: string,
-    id: string
+    id: string,
+    category: string,
     user_id: string
 };
 
@@ -200,13 +201,13 @@ const Post = (props: Props) => {
         try {
             const { error, data } = await supa.from("comments").select("*").eq("post_id", props.id)
             if (error) {
-                console.log(error)
+                console.error(error)
                 return
             }
             setComments(data.length)
         } catch (error) {
+            console.error(error)
             throw error
-            console.log(error)
         }
     }
 
@@ -214,14 +215,14 @@ const Post = (props: Props) => {
         try {
             const { error, data } = await supa.from("hearts").select("*").eq("post_id", props.id)
             if (error) {
-                console.log(error)
+                console.error(error)
                 return
             }
             setReactiveHearts(data.length)
         }
         catch (error) {
+            console.error(error)
             throw error
-            console.log(error)
         }
     }
 
@@ -229,19 +230,20 @@ const Post = (props: Props) => {
         try {
             const { error, data } = await supa.from("hearts").select("*").eq("id", authUser()?.id).eq("post_id", props.id)
             if (error) {
-                console.log(error)
+                console.error(error)
                 return
             }
-            console.log(data)
 
             if (data.length > 0) {
                 setHeart(true)
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
             throw error
         }
     }
+
+
 
     onMount(async () => {
         await getState()
@@ -249,6 +251,9 @@ const Post = (props: Props) => {
         await getHearts()
     })
 
+    const length = props.title.length
+
+    let fontSize = Math.max(18, 28 - length * 0.1);
 
     return (
         <Motion.div
@@ -259,24 +264,23 @@ const Post = (props: Props) => {
                 scale: visible() ? 1 : 0.5,
                 y: visible() ? 0 : 50,
             }}
-            class="shadow-xl w-full palette-gradient shadow-zinc-400 rounded-md bg-[--surface-alt] flex flex-col items-center ">
+            class="select-none shadow-lg w-full text-[var(--font-color-alt-2)] palette-gradient shadow-[color:var(--color-primary)] rounded-lg flex flex-col items-center ">
             <div
                 ref={cardRef}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 class={twMerge(
-                    "w-full rounded-md bg-[var(--surface)] flex flex-row justify-center gap-5  transition-all touch-pan-y select-none",
+                    "w-full rounded-md bg-[var(--background)] flex flex-row justify-center gap-5  transition-all touch-pan-y select-none",
                     dir() === "left" ? "-translate-x-50" : "translate-x-0",
                 )}
             >
 
                 <main class="flex flex-col w-full relative">
-                    <article class="flex-row flex justify-between gap-5 p-5">
-
-                        <section class="flex flex-col w-full">
-                            <article class="flex flex-row items-center gap-5">
-                                <section class="flex flex-col justify-center items-center">
+                    <section class="flex flex-col w-full p-2">
+                        <article class="flex flex-col items-start gap-2">
+                            <section class="flex flex-row justify-between items-center gap-3 w-full">
+                                <div class="w-[80%] flex flex-row items-center gap-2">
                                     <img
                                         onPointerDown={
                                             (e) => {
@@ -286,17 +290,18 @@ const Post = (props: Props) => {
                                         }
                                         src={props.avatar_url}
                                         alt=""
-                                        class="rounded-full w-16 h-16 cursor-pointer"
+                                        class="rounded-full w-16 h-auto cursor-pointer inline-block"
                                     />
-                                    <p class="font-bold text-[var(--color-secondary)]">{props.user_name}</p>
-                                </section>
-                                <h1 class="font-extrabold text-2xl w-full">{props.title}</h1>
-                            </article>
-                            <ExpandedParagraph>{props.text}</ExpandedParagraph>
-                        </section>
+                                    <p class="font-bold break-all md:break-normal text-lg  inline-block">{props.user_name}</p>
+                                </div>
+                                <div class="border-2 border-[var(--font-color-alt)] px-2 w-auto text-center rounded-full text-[var(--font-color-alt)]">{props.category}</div>
+                            </section>
 
-                    </article>
 
+                            <h1 style={{ "font-size": `${fontSize}px` }} class={`font-extrabold w-full`}>{props.title}</h1>
+                        </article>
+                        <ExpandedParagraph>{props.text}</ExpandedParagraph>
+                    </section>
                 </main>
 
             </div>
@@ -313,7 +318,7 @@ const Post = (props: Props) => {
             <section class="flex flex-row justify-center items-center gap-5 w-full h-5  text-xl shadow-2xl p-5">
                 <Motion.button
                     ref={BtnRef}
-                    animate={heart() ? { scale: [0.5, 1], color: "red" } : { color: "var(--color-secondary)" }}
+                    animate={heart() ? { scale: [0.5, 1], color: "red" } : { color: "var(--font-color-alt-2)" }}
                     transition={{ duration: 0.3, easing: [0.34, 1.56, 0.64, 1] }}
                     class="flex items-center gap-2 cursor-pointer"
                     onPointerDown={(e) => e.stopPropagation()}

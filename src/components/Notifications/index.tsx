@@ -43,7 +43,7 @@ const Notifications = () => (
                         initial={{ width: 0, opacity: 1 }}
                         animate={{ width: "100%", opacity: 1 }}
                         transition={{ duration: notification.duration / 1000, easing: "linear" }}
-                        class="flex justify-end h-[3px] bg-[var(--surface)]" />
+                        class="flex justify-end h-[3px] bg-white" />
                 </Motion.div>
             )}
         </For>

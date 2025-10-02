@@ -46,6 +46,13 @@ const FirstStep = ((props: { onNext: () => void }) => {
         }, 500);
     }
 
+    onMount(() => {
+        const account = localStorage.getItem("account")
+        if (account === "true") {
+            window.location.href = "/login";
+        }
+    })
+
     return (
         <>
             <div
@@ -59,13 +66,13 @@ const FirstStep = ((props: { onNext: () => void }) => {
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ easing: [0.34, 1.56, 0.64, 1], duration: 2 }}
-                        class="text-3xl w-full md:w-[70%] text-center font-bold text-[var(--color-primary)]">{question()}</Motion.p>
+                        class="text-3xl w-full md:w-[70%] text-center font-bold text-[var(--font-color-alt)]">{question()}</Motion.p>
 
                     <Motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ easing: [0.34, 1.56, 0.64, 1], duration: 2, delay: 0.8 }}
-                        class="flex flex-row w-full items-center justify-center gap-10 text-[var(--text)]">
+                        class="flex flex-row w-full items-center justify-center gap-10">
                         <Button btnStyle="button-palette" class="w-[10rem] text-3xl" onClick={() => { handleNext() }}>Si</Button>
                         <Button btnStyle="button-palette" class="w-[10rem] text-3xl" onClick={() => { }}>No</Button>
                     </Motion.div>
@@ -73,16 +80,16 @@ const FirstStep = ((props: { onNext: () => void }) => {
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ easing: [0.34, 1.56, 0.64, 1], duration: 2, delay: 1.3 }}
-                        class="text-[var(--color-primary)] underline-offset-2 underline" href="/login">Ya soy parte de helpit</Motion.a>
+                        class="text-[var(--font-color-alt)] underline-offset-2 underline" href="/login">Ya soy parte de helpit</Motion.a>
                 </Motion.div>
                 <Motion.div
                     initial={{ opacity: 0, x: 0 }}
                     exit={{ opacity: 0, x: 0 }}
                     transition={{ duration: 0.5 }}
                     animate={leaving() ? { opacity: 1, x: "-57.1vw" } : { opacity: 1, x: 0 }}
-                    class="flex-col hidden md:flex bg-[#ab5a7f] w-[60%] h-full rounded-2xl items-center justify-center">
+                    class="flex-col hidden md:flex bg-[#ab5a7f] w-[60%] h-full rounded-2xl items-center justify-center text-[var(--font-color)]">
                     <img alt="brand" height={500} width={500} src={brand}></img>
-                    <p class="font-bold text-3xl text-white">De todxs para todxs.</p>
+                    <p class="font-bold text-3xl">De todxs para todxs.</p>
                     <img alt="flubber" height={500} width={500} src="/flubber/flubbersad.gif"></img>
                 </Motion.div>
             </div>
@@ -127,7 +134,7 @@ const SecondStep = (props: { onNext: () => void }) => {
                     animate={leaving() ? { opacity: 0 } : { opacity: 1 }}
                 >
                     <img alt="brand" height={500} width={500} src={brand}></img>
-                    <p class="font-bold text-3xl text-white">De todxs para todxs.</p>
+                    <p class="font-bold text-3xl text-[var(--font-color)]">De todxs para todxs.</p>
                     <img alt="flubber" height={500} width={500} src="/flubber/flubbermobile.gif"></img>
                 </Motion.section>
             </Motion.div>
@@ -140,18 +147,18 @@ const SecondStep = (props: { onNext: () => void }) => {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
-                    class="text-2xl w-full md:w-[50%] text-center font-normal text-[var(--color-primary)]">
+                    class="text-2xl w-full md:w-[50%] text-center font-normal text-[var(--font-color-alt)]">
                     <span class="font-bold">helpit</span> es un lugar seguro y abierto a todxs,
                     donde compartir experiencias y recibir orientación es totalmente anónimo.
                     <article class="my-5 justify-center items-center flex flex-col">
-                        <p class="text-base font-normal text-[var(--color-secondary)]">#{user().id} </p>
+                        <p class="text-base font-normal">#{user().id} </p>
                         <Avatar avatar={avatar} setAvatar={setAvatar} />
-                        <section class="flex items-center  gap-2 ">
-                            <p class="text-3xl font-extrabold text-[var(--color-secondary)] break-all">{user().full_name}</p>
-                            <Button btnStyle="button-palette" class=" text-md" onclick={regenName}><li class="fa-solid fa-arrows-rotate"></li></Button>
+                        <section class="flex items-center  gap-4">
+                            <p class="text-2xl font-extrabold text-[var(--font-color-alt-2)] break-all">{user().full_name}</p>
+                            <Button btnStyle="button-palette" class=" text-sm" onclick={regenName}><li class="fa-solid fa-arrows-rotate"></li></Button>
                         </section>
-                        <p class="text-xl font-normal mt-5 text-[var(--color-secondary)]">Esta es tu tarjeta de perfil.</p>
-                        <p class="text-xl font-normal text-[var(--color-secondary)]">¿Quieres crear esta cuenta anonima?</p>
+                        <p class="text-xl font-normal mt-5 text-[var(--font-color-alt-2)]">Esta es tu tarjeta de perfil.</p>
+                        <p class="text-xl font-normal text-[var(--font-color-alt-2)]">¿Quieres crear esta cuenta anonima?</p>
                     </article>
                     <Button btnStyle="button-palette" class="w-[10rem] text-3xl" onClick={() => { handleNext() }}>Continuar</Button>
                 </Motion.p>
@@ -179,16 +186,6 @@ const ThirdStep = () => {
 
     const [src, setSrc] = createSignal<string>("");
 
-    onMount(() => {
-        const qr = QRCode(0, "L");
-        qr.addData("https://atmospheric-navy.vercel.app");
-        qr.make();
-
-        // Genera una imagen en base64
-        const imgTag = qr.createDataURL(32, 32);
-        setSrc(imgTag);
-    });
-
     const randomPassword = uniqueNamesGenerator({
         dictionaries: [colors, adjectives, animals, colors],
         length: 4,
@@ -203,10 +200,19 @@ const ThirdStep = () => {
         SignUp({ avatar: avatar(), password: passwordWordgen.join("").toLowerCase(), full_name: user().full_name });
     }
 
+    onMount(() => {
+        const qr = QRCode(0, "L");
+        qr.addData(`${import.meta.env.VITE_START_URL}/login/qrlogin?keywords=${passwordWordgen.join("")}&username=${user().full_name}`);
+        qr.make();
+
+        const imgTag = qr.createDataURL(32, 32);
+        setSrc(imgTag);
+    });
+
 
 
     return (
-        <div ref={divRef} class="w-screen h-[100vh] bg-[var(--color-primary)] flex flex-col items-center justify-center">
+        <div ref={divRef} class="w-screen h-[100vh] bg-[var(--background-alt)] flex flex-col items-center justify-center">
             <Motion.article
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -225,16 +231,16 @@ const ThirdStep = () => {
                     />
                 </div>
                 <section class="flex flex-col items-center justify-center">
-                    <p class="text-base my-3 font-normal text-[var(--color-secondary)] text-center">#{user().id} </p>
+                    <p class="text-base my-3 font-normal text-[var(--font-color-alt)] text-center">#{user().id} </p>
                     <Steps steps={3} completed={step()} />
                     <section class="flex  flex-col md:flex-row items-center gap-5">
                         <img
                             loading="lazy"
-                            class="w-40 h-40 rounded-2xl"
+                            class="w-auto h-32 rounded-2xl"
                             src={`/avatars/avatar${avatar()}.jpg`}
                         />
                         <section class="flex flex-col items-center justify-center">
-                            <p class="text-4xl font-extrabold my-2 text-center text-[var(--color-secondary)] break-all">{user().full_name}</p>
+                            <p class="text-3xl font-extrabold my-2 text-center text-[var(--font-color-alt-2)] break-all">{user().full_name}</p>
                             <section class="flex flex-col md:flex-row gap-2 items-center">
                                 <For each={passwordWordgen}>
                                     {(word, i) =>
@@ -249,7 +255,7 @@ const ThirdStep = () => {
                             </section>
                         </section>
                     </section>
-                    <p class="text-xl font-normal mt-5 text-[var(--color-secondary)] text-center">Vuelve a ingresar con tu nombre y <span class="text-palette-gradient underline decoration-[var(--color-tertiary)] rounded-2xl p-1">palabras clave</span> o
+                    <p class="text-xl font-normal mt-5 text-[var(--font-color-alt)] text-center">Vuelve a ingresar con tu nombre y <span class="text-palette-gradient underline decoration-[var(--color-tertiary)] rounded-2xl p-1">palabras clave</span> o
                         escanea tu QR.</p>
                 </section>
 
@@ -266,15 +272,11 @@ const ThirdStep = () => {
                     />
                 </div>
             </Motion.article>
-            <Button btnStyle="button-palette" class="w-[10rem] text-3xl my-6" onClick={() => { handleClick() }}>Continuar</Button>
+            <Button btnStyle="button-palette" class="w-[10rem] text-2xl my-6" onClick={() => { handleClick() }}>Continuar</Button>
         </div >
     )
 }
 const Home = () => {
-
-    createEffect(() => {
-        console.log(step())
-    }, step)
 
     return (
         <>

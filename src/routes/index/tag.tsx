@@ -6,7 +6,7 @@ interface Props {
 
 const KeywordTag = (props: Props) => {
     return (
-        <div class="palette-gradient text-center rounded-lg  p-1">
+        <div class="palette-gradient text-center rounded-lg text-[var(--font-color-alt)] p-1">
             {props.children}
         </div>
     )

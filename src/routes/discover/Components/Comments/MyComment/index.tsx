@@ -82,7 +82,7 @@ const MyComment = (props: { post_id: string }) => {
 
         <form class="w-[90%]" onsubmit={(e) => handleSubmit(e)}>
             <div
-                class="p-1 flex flex-col items-center bg-[var(--surface)] text-[var(--color-secondary)] select-none rounded-md ">
+                class="p-1 flex flex-col items-center bg-[var(--background)] text-[var(--font-color-alt-2)] select-none rounded-md ">
 
                 <div
                     class="w-full flex flex-row justify-center"
@@ -112,7 +112,7 @@ const MyComment = (props: { post_id: string }) => {
                 <Motion.button
                     initial={{ scale: 1 }}
                     hover={{ scale: 1.3, opacity: 1 }}
-                    class="cursor-pointer text-[var(--surface)] w-8 h-8 rounded-full p-1  bg-[var(--color-primary)]  border-[var(--color-secondary)] font-bold"><i class="fa-solid fa-paper-plane"></i></Motion.button>
+                    class="cursor-pointer text-white w-8 h-8 rounded-full p-1 bg-[var(--color-primary)] font-bold"><i class="fa-solid fa-paper-plane"></i></Motion.button>
             </div >
         </form>
     )

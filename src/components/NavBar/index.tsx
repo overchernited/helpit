@@ -27,7 +27,7 @@ const NButton = (props: { children?: JSX.Element, redirect: string }) => {
             onclick={(event) => {
                 event.stopPropagation()
                 handleClick(event)
-            }} class=" bg-[var(--surface)]  text-2xl  text-[var(--color-secondary)] cursor-pointer w-10 h-10 rounded-full" >{props.children}</Motion.button>
+            }} class=" bg-[var(--background)] text-2xl text-[var(--font-color-alt)] cursor-pointer w-10 h-10 rounded-full" >{props.children}</Motion.button>
     )
 }
 
@@ -56,13 +56,13 @@ const Navbar = () => {
 
     return (
         <Motion.nav
-            initial={{ height: "2rem" }}
-            animate={{ height: active() ? "4rem" : "1rem" }}
+            initial={{ height: "4rem" }}
+            animate={{ height: active() ? "4rem" : "1.5rem" }}
             onclick={(event) => {
                 event.stopPropagation()
                 handleClick()
             }}
-            class="cursor-pointer bg-[var(--color-primary)] border-[var(--surface)] border-t-2 border-x-2 py-2 flex justify-center items-center fixed bottom-0 left-1/2 -translate-x-1/2 p-2 w-[90%] md:w-[60%] rounded-t-3xl! z-[50] overflow-hidden select-none" >
+            class="cursor-pointer bg-[var(--color-primary)] text-[var(--font-color)] border-[var(--font-color)] border-t-2 border-x-2 py-2 flex justify-center items-center fixed bottom-0 left-1/2 -translate-x-1/2 p-2 w-[90%] md:w-[60%] rounded-t-3xl! z-[50] overflow-hidden select-none" >
 
             <Presence exitBeforeEnter>
                 <Show when={active()} keyed>
@@ -73,7 +73,7 @@ const Navbar = () => {
                         class="w-full flex justify-between">
                         <NButton redirect="/levels"><i class="fa-solid fa-crown"></i></NButton>
                         <NButton redirect="/settings"><i class="fa-solid fa-gear"></i></NButton>
-                        <div class="flex flex-col justify-center items-center relative">
+                        <div class="flex flex-col justify-center text-[var(--font-color)] items-center relative">
                             <img
                                 onpointerdown={(e) => {
                                     e.stopPropagation();
@@ -81,7 +81,7 @@ const Navbar = () => {
                                 }}
                                 loading="lazy"
                                 class="w-10 h-10 rounded-full cursor-pointer" src={authUser()?.user_metadata.avatar_url}></img>
-                            <p class="text-xs absolute translate-y-[100%] mt-5 text-[var(--surface)]">LVL {authUser()?.user_metadata.level}</p>
+                            <p class="text-xs absolute translate-y-[100%] mt-5">LVL {authUser()?.user_metadata.level}</p>
                         </div>
                         <NButton redirect="/discover"><i class="fa-solid fa-magnifying-glass"></i></NButton>
                         <NButton redirect="/discover"><i class="fa-solid fa-plus"></i></NButton>

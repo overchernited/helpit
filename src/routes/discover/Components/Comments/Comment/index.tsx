@@ -14,12 +14,12 @@ const Comment = (props: Props) => {
         <div
             class="w-[90%] flex flex-col items-center ">
             <div
-                class="w-full p-1 flex flex-row justify-center select-none border-b-1 border-[var(--surface)] text-[var(--surface)]"
+                class="w-full p-1 flex flex-row justify-center select-none border-b-1 border-[var(--background)] text-[var(--font-color)]"
             >
                 <main class="flex flex-col w-full relative">
-                    <article class="flex-row flex justify-between gap-5 p-5">
-                        <section class="flex flex-row w-full">
-                            <section class="flex flex-col items-center justify-center">
+                    <article class="flex-row flex justify-between">
+                        <section class="flex flex-col w-full gap-1">
+                            <section class="flex flex-row justify-center items-center gap-1">
                                 <img
                                     onclick={(e) => {
                                         e.preventDefault();
@@ -29,7 +29,7 @@ const Comment = (props: Props) => {
                                     alt=""
                                     class="rounded-full w-10 h-10 cursor-pointer"
                                 />
-                                <p class="font-bold line-clamp-1">{props.user_name}</p>
+                                <p class="font-bold w-[95%] text-md break-all">{props.user_name}</p>
                             </section>
                             <ExpandedParagraph>{props.comment}</ExpandedParagraph>
                         </section>
