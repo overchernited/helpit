@@ -290,7 +290,7 @@ const Post = (props: Props) => {
                                         }
                                         src={props.avatar_url}
                                         alt=""
-                                        class="rounded-full w-16 h-auto cursor-pointer inline-block"
+                                        class="rounded-full w-16 h-auto cursor-pointer object-cover "
                                     />
                                     <p class="font-bold break-all md:break-normal text-lg  inline-block">{props.user_name}</p>
                                 </div>

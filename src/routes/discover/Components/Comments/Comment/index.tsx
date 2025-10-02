@@ -27,7 +27,7 @@ const Comment = (props: Props) => {
                                     }}
                                     src={props.avatar_url}
                                     alt=""
-                                    class="rounded-full w-10 h-10 cursor-pointer"
+                                    class="rounded-full w-auto h-10 cursor-pointer object-cover aspect-square"
                                 />
                                 <p class="font-bold w-[95%] text-md break-all">{props.user_name}</p>
                             </section>

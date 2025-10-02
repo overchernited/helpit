@@ -100,7 +100,7 @@ function PostLoader(props: { userId?: string; category: string }) {
     // 📌 Ciclo de vida
     onMount(() => {
         GetPosts();
-        setInterval(() => setupChannel(), 3000);
+        setupChannel();
 
     });
 

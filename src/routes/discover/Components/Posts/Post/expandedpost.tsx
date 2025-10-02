@@ -47,7 +47,7 @@ const ExpandedPost = (props: PostProps) => {
                                             src={props.avatar_url}
                                             alt=""
                                             onpointerdown={() => { window.location.href = `/users/${props.user_id}` }}
-                                            class="rounded-full w-16 h-16 cursor-pointer"
+                                            class="rounded-full w-auto h-16 cursor-pointer object-cover"
                                         />
                                         <p class="font-bold w-[95%] text-xs break-all">{props.user_name}</p>
                                     </section>

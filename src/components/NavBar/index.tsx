@@ -80,7 +80,7 @@ const Navbar = () => {
                                     window.location.href = `/users/${authUser()?.id}`
                                 }}
                                 loading="lazy"
-                                class="w-10 h-10 rounded-full cursor-pointer" src={authUser()?.user_metadata.avatar_url}></img>
+                                class="w-auto object-cover h-10 rounded-full cursor-pointer" src={authUser()?.user_metadata.avatar_url}></img>
                             <p class="text-xs absolute translate-y-[100%] mt-5">LVL {authUser()?.user_metadata.level}</p>
                         </div>
                         <NButton redirect="/discover"><i class="fa-solid fa-magnifying-glass"></i></NButton>

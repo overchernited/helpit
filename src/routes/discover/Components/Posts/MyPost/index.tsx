@@ -132,7 +132,7 @@ const MyPost = () => {
                             <article class="flex flex-col justify-center items-center">
                                 <img
                                     src={authUser()?.user_metadata.avatar_url}
-                                    class="w-16 h-16 rounded-full mt-5"
+                                    class="w-auto h-16 rounded-full mt-5 object-cover "
                                     alt="user avatar"
                                 />
                                 <p class="font-bold w-full truncate">{authUser()?.user_metadata.full_name}</p>
