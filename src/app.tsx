@@ -7,14 +7,16 @@ import Signature from "~/components/Signature";
 import "~/styles/global.scss";
 import "~/styles/tailwind.css";
 import ModalSetter from "./components/modal";
+import Theme from "./store/theme";
 
 export default function App() {
   return (
     <Router
       root={props => (
         <>
-          <Signature />
+          <Theme />
           <UserHandler />
+          <Signature />
           <Notifications />
           <ModalSetter />
           <Suspense>{props.children}</Suspense>
