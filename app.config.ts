@@ -4,5 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()] as any
+  },
+  server: {
+    preset: "vercel"
   }
 });
