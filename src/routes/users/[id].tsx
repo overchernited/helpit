@@ -97,34 +97,37 @@ const User = () => {
             <Private endpoint="/login">
                 <Show when={user()} fallback={<Loading />}>
                     <Navbar />
-                    <div class="flex items-center w-screen h-screen flex-col overflow-y-scroll gap-2 bg-[var(--color-primary)]">
-                        <main class="flex flex-col items-center w-[90vw] h-screen my-4 gap-2">
+                    <div class="flex items-center text-[var(--font-color)] min-h-screen h-auto w-screen flex-col gap-2 bg-[var(--background-alt)]">
+                        <main class="flex flex-col items-center w-[90vw] my-4 gap-2 ">
                             <div class="flex flex-col items-center my-4">
                                 <article class="flex flex-row justify-center items-center gap-2">
-                                    <img src={user()?.avatar_url} class="w-32 h-32 rounded-full" alt="User avatar image" />
+                                    <img src={user()?.avatar_url} class="w-32 h-32 rounded-xl" alt="User avatar image" />
                                     <section class="flex flex-col">
-                                        <h1 class="text-2xl md:text-3xl font-bold text-[var(--surface)] line-clamp-2 break-all">{user()?.full_name}</h1>
-                                        <h1 class="text-xl font-bold text-[var(--surface)]">NIVEL {user()?.level}</h1>
+                                        <h1 class="text-2xl md:text-3xl font-bold line-clamp-2 break-all">{user()?.full_name}</h1>
+                                        <h1 class="text-xl font-bold">NIVEL {user()?.level}</h1>
                                     </section>
                                 </article>
-                                <div class="text-[var(--surface)] text-2xl gap-5 flex ">
+                                <div class="my-3 text-2xl gap-5 flex ">
                                     <li class="fa-solid fa-heart">
                                         <span class="m-2">{hearts()}</span>
                                     </li>
                                     <li class="fa-solid fa-newspaper"><span class="m-2">{posts()}</span></li>
                                 </div>
                             </div>
-                            <h2 class="text-2xl font-bold text-[var(--surface)]">Logros</h2>
-                            <section class="flex flex-row items-center gap-2">
+                            <h2 class="text-2xl font-medium">Logros</h2>
+                            <section class="flex flex-col md:flex-row items-center gap-2">
 
-                                <For each={achievements()} fallback={<h1>No logros</h1>}>
+                                <For each={achievements()} fallback={<h1 class="font-bold text-2xl">El usuario no tiene logros</h1>}>
                                     {(achievement) =>
-                                        <img src={`/achievements/${achievement}.png`} class="w-auto h-32" />
+                                        <div class="text-center">
+                                            <img src={`/achievements/${achievement}.png`} class="w-auto h-32" />
+                                            <label class="font-bold text-xl">{achievement}</label>
+                                        </div>
                                     }
                                 </For>
                             </section>
-                            <h2 class="text-2xl font-bold text-[var(--surface)]">Publicaciones</h2>
-                            <PostLoader userId={user()?.id} />
+                            <h2 class="text-2xl font-medium">Publicaciones</h2>
+                            <PostLoader userId={user()?.id} category="*" />
                         </main>
                     </div>
                 </Show>
