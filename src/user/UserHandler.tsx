@@ -8,6 +8,8 @@ export const [loadingUser, setLoadingUser] = createSignal(true);
 export const [level, setLevel] = createSignal<number>(1);
 export const [userMeta, setUserMeta] = createSignal<Record<string, any>>({});
 
+export const [userSignUpState, setUserSignUpState] = createSignal("");
+
 export const calculateLevel = (xp: number): number => {
     let lvl = 1;
     let xpNeeded = 50;
@@ -63,58 +65,64 @@ export const giveXp = async (amount: number) => {
             type: "success",
             duration: 3000
         });
-        console.log(`✅ XP dado: ${amount}, Total XP: ${newXp}, Nivel: ${newLvl}`);
     } catch (err) {
         console.error("Error en giveXp:", err);
     }
 };
 
-const UserHandler = () => {
-    const handleAuth = async (_event: string, session: Session | null) => {
-        const user = session?.user ?? null;
-        setAuthUser(user);
-        setUserMeta(user?.user_metadata ?? {});
-        setLevel(user?.user_metadata?.level ?? 1);
-        setLoadingUser(false);
 
-        if (_event === "SIGNED_IN" && user) {
-            try {
-                const { data: existing } = await supa.from("profiles").select("id").eq("id", user.id).maybeSingle();
-                if (!existing) {
-                    const meta = user.user_metadata ?? {};
-                    await supa.from("profiles").insert({
-                        id: user.id,
-                        avatar_url: meta.avatar_url,
-                        full_name: meta.full_name ?? "Nuevo usuario",
-                        level: meta.level ?? 1,
-                        xp: meta.xp ?? 0,
-                        achievments: meta.achievments ?? []
-                    });
-                    console.log("Perfil creado ✅");
-                }
-                await refreshUser();
-            } catch (err) {
-                AddNotification({ message: "Error creando perfil", title: "Algo salió mal.", type: "error", duration: 3000 });
-            }
+const handleAuth = async (event: string, session: Session | null) => {
+    const user = session?.user ?? null;
+    setAuthUser(user);
+    setUserMeta(user?.user_metadata ?? {});
+    setLevel(user?.user_metadata?.level ?? 1);
+
+    if (event === "SIGNED_IN" && user) {
+        const { data: existing } = await supa
+            .from("profiles")
+            .select("id")
+            .eq("id", user.id)
+            .maybeSingle();
+
+
+        if (!existing) {
+            const meta = user.user_metadata ?? {};
+            await supa.from("profiles").insert({
+                id: user.id,
+                avatar_url: meta.avatar_url,
+                full_name: meta.full_name ?? "Nuevo usuario",
+                level: meta.level ?? 1,
+                xp: meta.xp ?? 0,
+                achievments: meta.achievments ?? []
+            });
+            setUserSignUpState("FIRST_TIME")
+        } else {
+            setUserSignUpState("EXISTING_USER")
+
         }
-    };
+    }
+};
 
+const UserHandler = () => {
     onMount(async () => {
         setLoadingUser(true);
-        const { data: { session }, error: sessionError } = await supa.auth.getSession();
-        if (sessionError) {
-            console.error("Error obteniendo sesión:", sessionError);
-            setLoadingUser(false);
-            return;
+
+        const { data, error } = await supa.auth.getSession();
+        if (data?.session) {
+            await handleAuth("SIGNED_IN", data.session);
+        } else {
+            setAuthUser(null);
         }
+        setLoadingUser(false);
 
-        await handleAuth("SIGNED_IN", session ?? null);
+        const { data: listener } = supa.auth.onAuthStateChange(
+            async (event, session) => {
+                await handleAuth(event, session);
+                setLoadingUser(false);
+            }
+        );
 
-        const { data } = supa.auth.onAuthStateChange(async (event, session) => {
-            await handleAuth(event, session);
-        });
-
-        onCleanup(() => data.subscription.unsubscribe());
+        onCleanup(() => listener.subscription.unsubscribe());
     });
 
     return null;
