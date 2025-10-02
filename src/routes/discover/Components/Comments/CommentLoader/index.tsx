@@ -1,4 +1,4 @@
-import { For, createSignal, onMount } from "solid-js";
+import { For, createSignal, onCleanup, onMount } from "solid-js";
 import Comment from "../Comment";
 import MyComment from "../MyComment";
 import supa from "~/lib/supabase";
@@ -9,6 +9,7 @@ interface CommentProps {
     comment: string;
     id: string;
     user_id: string;
+    post_id: string
 }
 
 const CommentLoader = (props: { post_id: string }) => {
@@ -29,7 +30,42 @@ const CommentLoader = (props: { post_id: string }) => {
         }
     }
 
-    onMount(() => getCommentsById());
+
+
+    onMount(() => {
+        getCommentsById()
+        const channel = supa
+            .channel("realtime:comments")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "comments" },
+                (payload) => {
+                    const newComment = payload.new as CommentProps;
+                    const oldComment = payload.old as CommentProps;
+
+                    if (newComment.post_id !== props.post_id) return
+
+                    if (payload.eventType === "INSERT") {
+                        setComments(prev => [newComment, ...prev]);
+                    }
+
+                    if (payload.eventType === "UPDATE") {
+                        setComments(prev =>
+                            prev.map(p => (p.id === newComment.id ? newComment : p))
+                        );
+                    }
+
+                    if (payload.eventType === "DELETE") {
+                        setComments(prev => prev.filter(p => p.id !== oldComment.id));
+                    }
+                }
+            )
+            .subscribe();
+        onCleanup(() => supa.removeChannel(channel));
+    }
+
+
+    );
 
     return (
         <div class=" w-full h-[80vh] flex overflow-y-auto items-center flex-col gap-4">
