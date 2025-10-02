@@ -11,7 +11,6 @@ interface Props {
 const Private = (props: Props) => {
 
     createEffect(() => {
-        console.log(authUser(), loadingUser())
         if (!loadingUser() && !authUser()) {
             window.location.href = props.endpoint;
         }
@@ -25,8 +24,8 @@ const Private = (props: Props) => {
 };
 
 export const Public = (props: Props) => {
+
     createEffect(() => {
-        console.log(authUser(), loadingUser())
         if (!loadingUser() && authUser()) {
             window.location.href = props.endpoint;
         }

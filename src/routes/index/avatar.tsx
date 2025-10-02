@@ -38,7 +38,7 @@ const Avatar = (props: AvatarProps) => {
                             exit={{ scale: 0.5, opacity: 0 }}
                             transition={{ duration: 0.05 }}
                             loading="lazy"
-                            class="w-40 h-40 rounded-2xl"
+                            class="w-32 h-auto rounded-2xl"
                             src={`/avatars/avatar${current}.jpg`}
                         />
                     )}
