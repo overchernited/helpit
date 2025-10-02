@@ -1,4 +1,4 @@
-import { createSignal, createMemo, For } from "solid-js";
+import { createSignal, createMemo, For, onMount } from "solid-js";
 import Input from "~/components/Input";
 import DynamicBackground from "~/components/DynamicBackground";
 import { Motion } from "solid-motionone";
@@ -10,6 +10,13 @@ import { AddNotification } from "~/components/Notifications";
 
 const Login = () => {
     const [username, setUsername] = createSignal("");
+
+    onMount(() => {
+        const account = localStorage.getItem("account")
+        if (account === "true") {
+            AddNotification({ message: "Parece que ya creaste una cuenta antes!", title: "Hola!", type: "success", duration: 3000 })
+        }
+    })
 
     // Array de signals para cada keyword
     const [keywordsSignals] = createSignal([
@@ -59,12 +66,12 @@ const Login = () => {
                     initial={{ width: "100vw" }}
                     animate={{ width: "60vw" }}
                     class="h-full justify-center items-center rounded-2xl p-5 flex flex-col">
-                    <h1 class="text-left bg-[var(--color-primary)] p-2 text-4xl my-2 rounded-md font-bold text-[var(--surface)]">¡Bienvenido de vuelta!</h1>
-                    <h2 class="text-left text-md font-medium text-[var(--color-secondary)]">
+                    <h1 class="text-left bg-[var(--color-primary)] p-2 text-4xl my-2 rounded-md font-bold text-[var(--font-color)]">¡Bienvenidx de vuelta!</h1>
+                    <h2 class="text-left text-md font-medium text-[var(--font-color-alt)]">
                         Espero recuerdes tus credenciales! 🙌🏻
                     </h2>
 
-                    <form onSubmit={handleSubmit} class="flex items-center w-[29vw] flex-col gap-5 my-2 px-5">
+                    <form onSubmit={handleSubmit} class="flex items-center w-[29vw] flex-col gap-5 my-2 px-5 text-[var(--font-color)]">
                         <div class="w-full">
                             <label for="username" class="font-medium">Nombre de usuario:</label>
                             <Input
@@ -93,7 +100,7 @@ const Login = () => {
                             <Button btnStyle="button-palette" class="w-[14rem] text-xl">
                                 Continuar
                             </Button>
-                            <a href="/" class="text-[var(--color-primary)] underline">No tengo una cuenta</a>
+                            <a href="/" class="text-[var(--font-color-alt)] underline">No tengo una cuenta</a>
                         </section>
                     </form>
                 </Motion.div>

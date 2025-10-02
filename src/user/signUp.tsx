@@ -9,6 +9,7 @@ interface UserProps {
 
 const SignUp = async (props: UserProps) => {
     try {
+        localStorage.setItem("account", "true")
         const { error } = await supa.auth.signUp({
             email: props.full_name + '@helpit.com',
             password: props.password,
