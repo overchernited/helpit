@@ -160,7 +160,9 @@ const SecondStep = (props: { onNext: () => void }) => {
                         <p class="text-xl font-normal mt-5 text-[var(--font-color-alt-2)]">Esta es tu tarjeta de perfil.</p>
                         <p class="text-xl font-normal text-[var(--font-color-alt-2)]">¿Quieres crear esta cuenta anonima?</p>
                     </article>
-                    <Button btnStyle="button-palette" class="w-[10rem] text-3xl" onClick={() => { handleNext() }}>Continuar</Button>
+                    <a class="underline font-bold text-sm " href="/rules">Al crear una cuenta aceptas los terminos y condiciones junto al reglamento. </a>
+                    <br />
+                    <Button btnStyle="button-palette" class="w-[10rem] text-3xl m-2" onClick={() => { handleNext() }}>Continuar</Button>
                 </Motion.p>
             </Motion.div>
 
@@ -272,11 +274,8 @@ const ThirdStep = () => {
                     />
                 </div>
             </Motion.article>
-            <Button btnStyle="button-palette" class="w-[10rem] text-2xl my-6" onClick={() => { handleClick() }}>Continuar</Button>
-            <Show when={signInLoading()}>
-                <div class="m-auto spinner" />
-                <div class="m-auto spinner w-5 h-5 border-4 border-[var(--color-tertiary)] border-t-transparent rounded-full animate-spin " />
-            </Show>
+            <Button btnStyle="button-palette" class="w-[10rem] text-2xl my-6" isLoading={signInLoading()} onClick={() => { handleClick() }}>Continuar</Button>
+
         </div >
     )
 }
