@@ -16,8 +16,8 @@ const Levels = () => {
                         <h1 class="text-center font-extrabold text-3xl">{authUser()?.user_metadata.full_name}</h1>
                         <h1 class="text-center font-bold text-2xl">LVL {authUser()?.user_metadata.level}</h1>
                         <h2 class="text-center font-medium text-lg">XP: {authUser()?.user_metadata.xp}</h2>
-                        <p class="text-xl font-extralight">¡Gana experencia interactuando en helpIt con likes, comentarios y publicaciones!</p>
-
+                        <p class="text-xl font-extralight">¡Sube de nivel y gana logros interactuando en helpIt con likes, comentarios y publicaciones!</p>
+                        <h1 class="text-center font-bold text-4xl underline my-2">Tu progreso</h1>
                     </section>
 
                     <article class="flex flex-wrap items-center justify-center gap-20 h-full w-full my-20 pb-10">

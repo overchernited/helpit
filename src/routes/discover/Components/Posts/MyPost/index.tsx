@@ -101,7 +101,14 @@ const MyPost = (props: Props) => {
         await giveXp(10)
         setIsFocused(false)
 
+
     };
+    createEffect(() => {
+        if (isFocused()) {
+            const ref = document.getElementById("myPost");
+            ref?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    })
 
     return (
         <>
@@ -117,21 +124,18 @@ const MyPost = (props: Props) => {
             </Show>
             <Motion.div
                 animate={{
-                    y: isFocused() ? "-20%" : "0%",
-                    height: isFocused() ? "40vh" : "20vh",
+                    height: isFocused() ? "50vh" : "24vh",
                 }}
                 transition={{ duration: 0.6, easing: [0.34, 1.56, 0.64, 1] }}
                 style={{ "transform-origin": "top center" }}
                 id="myPost"
 
-                class="w-full h-[20vh] z-[500] flex-col flex justify-center items-center touch-pan-x text-[var(--font-color-alt-2)]"
+                class="w-full h-[20vh] z-[500] my-3 flex-col flex justify-center items-center touch-pan-x text-[var(--font-color-alt-2)]"
             >
-                <Show when={isFocused()} fallback={<></>}>
-                    <p class="font-bold text-[var(--font-color)]">Escribe algo para {category()}</p>
-                </Show>
+                <p class=" text-[var(--font-color-alt)] font-black text-2xl my-2">Escribe algo para {category()}</p>
                 <div
                     ref={ref}
-                    class="w-full h-full palette-gradient rounded-3xl px-4 my-5 flex flex-row justify-center gap-5 shadow-lg shadow-[color:var(--color-primary)] touch-pan-x"
+                    class="w-full h-full palette-gradient rounded-3xl px-4 mb-2 flex flex-row justify-center gap-5 shadow-lg shadow-[color:var(--color-primary)] touch-pan-x"
                 >
                     <form class="flex flex-col h-full w-full" onsubmit={handleSubmit} onkeydown={(e) => e.key === "Enter" && e.preventDefault()}>
                         <section class="flex flex-row justify-center items-center">
@@ -149,8 +153,8 @@ const MyPost = (props: Props) => {
                                 onBlur={handleBlur}
                                 value={title()}
                                 onInput={(e) => setTitle(e.currentTarget.value)}
-                                class="bg-transparent outline-0 font-bold text-xl w-full"
-                                placeholder={`Escribe un título para tu publicación.`}
+                                class="bg-transparent outline-0 font-bold text-md md:text-xl w-full"
+                                placeholder={`Titulo para tu publicación`}
                             />
                         </section>
                         <textarea

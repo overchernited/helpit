@@ -74,7 +74,7 @@ const Flubberai = () => {
                             </figure>
                             <p>FLUBBER AI</p>
                         </div>
-                        <article class="w-[100%] h-[72vh] p-5 overflow-y-auto">
+                        <article class="w-[100%] h-[67vh] p-5 overflow-y-auto">
                             <h1 class="text-center text-3xl font-extrabold text-[var(--font-color-alt)]">¡Pregúntale a Flubber!</h1>
                             <p class="text-center text-[var(--font-color-alt)] mb-4">Flubber está aquí para ayudarte en lo que necesites.</p>
 
