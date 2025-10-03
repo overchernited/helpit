@@ -36,7 +36,7 @@ const Discover = () => {
                         <p class="text-[var(--font-color-alt-2)] font-bold text-md">O también puedes:</p>
                         <a href="/flubberai" target="_blank" class=" cursor-pointer rounded-lg text-md text-center text-[var(--font-color-alt)] border-2 border-[var(--font-color-alt)] p-3">Hablar con Flubber AI <i class="fa-solid fa-up-right-from-square"></i></a>
                     </Show>
-                    <h1 class="text-center font-extrabold text-4xl  text-[var(--font-color-alt)]">¿Nesecitas más ayuda?</h1>
+                    <h1 class="text-center font-extrabold text-3xl  text-[var(--font-color-alt)]">¿Nesecitas más ayuda?</h1>
                     <div class="flex flex-col justify-center items-center gap-1 w-[90vw] text-[var(--font-color-alt-2)]">
                         Linea 106 (CO) & 300 754 8933
                         <a class="underline" href="https://bogota.gov.co/mi-ciudad/salud/lineas-de-atencion-para-personas-que-sufren-de-ansiedad-y-depresion">Lee más articulos de ayuda aca.
@@ -46,8 +46,8 @@ const Discover = () => {
                     <div class="flex justify-center h-auto w-[90vw] md:w-[50vw] " >
                         <MyPost onCreate={() => setRefetchSignal((prev) => setRefetchSignal(prev + 1))} />
                     </div >
-                    <h1 class="text-4xl text-center font-bold text-[var(--font-color-alt)]">Bienvenidx de vuelta!</h1>
                     <Categories />
+                    <h1 class="text-4xl text-center font-bold text-[var(--font-color-alt)]">Bienvenidx de vuelta!</h1>
                     <PostLoader category={category()} signal={refetchSignal()} />
                 </div>
             </Private >
