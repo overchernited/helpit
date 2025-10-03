@@ -2,19 +2,19 @@ import Button from "~/components/Button";
 import { uniqueNamesGenerator, adjectives, colors, animals, starWars, names } from "unique-names-generator";
 import DynamicBackground from "~/components/DynamicBackground";
 import Steps from "~/components/Steps";
-import { createEffect, createSignal, For, onMount, onCleanup } from "solid-js";
+import { createSignal, For, onMount, Show } from "solid-js";
 import { Motion } from "solid-motionone"
 import Avatar from "./index/avatar";
 import KeywordTag from "./index/tag";
-import supa from "~/lib/supabase";
 import QRCode from "qrcode-generator";
 import brand from "~/assets/branding/brandnegative.png";
 import party from "party-js";
 
-// Delete when 3D model is ready
 import { Public } from "~/components/Routes";
 import { nanoid } from "nanoid";
 import SignUp from "~/user/signUp";
+
+import { setSignInLoading, signInLoading } from "~/user/signUp";
 
 const [avatar, setAvatar] = createSignal(1);
 
@@ -273,6 +273,10 @@ const ThirdStep = () => {
                 </div>
             </Motion.article>
             <Button btnStyle="button-palette" class="w-[10rem] text-2xl my-6" onClick={() => { handleClick() }}>Continuar</Button>
+            <Show when={signInLoading()}>
+                <div class="m-auto spinner" />
+                <div class="m-auto spinner w-5 h-5 border-4 border-[var(--color-tertiary)] border-t-transparent rounded-full animate-spin " />
+            </Show>
         </div >
     )
 }
