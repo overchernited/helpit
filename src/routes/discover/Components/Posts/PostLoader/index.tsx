@@ -115,7 +115,7 @@ function PostLoader(props: Props) {
     });
 
     return (
-        <div class="h-auto w-[90vw] md:w-[50vw] flex flex-col items-center gap-5 my-5">
+        <div class="h-full w-[90vw] md:w-[50vw] flex flex-col items-center gap-5 mt-5 mb-15">
             <Show
                 when={posts().length > 0}
                 fallback={<div class="text-center font-bold text-[var(--color-tertiary)]">No hay posts</div>}
