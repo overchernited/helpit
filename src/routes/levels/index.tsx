@@ -2,9 +2,16 @@ import Navbar from "~/components/NavBar"
 import LevelCard from "./Components/LevelCard"
 import Private from "~/components/Routes"
 import { authUser } from "~/user/UserHandler"
+import { onCleanup, onMount } from "solid-js"
+import supa from "~/lib/supabase"
 
 
 const Levels = () => {
+    onMount(() => {
+        supa.auth.startAutoRefresh()
+    })
+
+    onCleanup(() => supa.auth.stopAutoRefresh())
     return (
         <>
             <Private endpoint="/login">
@@ -21,40 +28,40 @@ const Levels = () => {
                     </section>
 
                     <article class="flex flex-wrap items-center justify-center gap-20 h-full w-full my-20 pb-10">
-                        <LevelCard levelName="Nivel 1" minLVL={1}>
+                        <LevelCard levelName="Nivel 1" minLVL={1} imgUrl="LEVEL0.png">
                             <p class="text-2xl text-center font-bold">¡Aca comienza tu aventura!</p>
                             <ul>
                                 <li>Bienvenido a helpit, disfruta de tu estancia</li>
                             </ul>
 
                         </LevelCard>
-                        <LevelCard levelName="Nivel 2" achievmentMedal="friendly" minLVL={2}>
+                        <LevelCard levelName="Nivel 2" achievmentMedal="friendly" minLVL={2} imgUrl="LEVEL1.png">
                             <ul>
-                                <li>Nescecitas 50XP para llegar aca.</li>
+                                <li>Nesecitas 50XP para llegar aca.</li>
                                 <li>El inicio del viaje, donde los usuarios dan sus primeros pasos como criaturas que ayudan a la comunidad.</li>
                             </ul>
                         </LevelCard>
-                        <LevelCard levelName="Nivel 3" achievmentMedal="partnerly" minLVL={3}>
+                        <LevelCard levelName="Nivel 3" achievmentMedal="partnerly" minLVL={3} imgUrl="LEVEL2.png">
                             <ul>
-                                <li>Nescecitas 150XP para llegar aca.</li>
+                                <li>Nesecitas 150XP para llegar aca.</li>
                                 <li>Usuarios que empiazan a conectar y apoyar a otros.</li>
                             </ul>
                         </LevelCard>
-                        <LevelCard levelName="Nivel 4" achievmentMedal="listener" minLVL={4}>
+                        <LevelCard levelName="Nivel 4" achievmentMedal="listener" minLVL={4} imgUrl="LEVEL3.png">
                             <ul>
-                                <li>Nescecitas 350XP para llegar aca.</li>
+                                <li>Nesecitas 350XP para llegar aca.</li>
                                 <li>Criaturas que escuchan con atencion y aportan empatia a la comunidad</li>
                             </ul>
                         </LevelCard>
-                        <LevelCard levelName="Nivel 5" achievmentMedal="guardian" minLVL={5}>
+                        <LevelCard levelName="Nivel 5" achievmentMedal="guardian" minLVL={5} imgUrl="LEVEL4.png">
                             <ul>
-                                <li>Nescecitas 750XP para llegar aca.</li>
+                                <li>Nesecitas 750XP para llegar aca.</li>
                                 <li>Criaturas que protegen y cuidan el espacio de la comunidad</li>
                             </ul>
                         </LevelCard>
-                        <LevelCard levelName="Nivel 6" achievmentMedal="king" minLVL={6}>
+                        <LevelCard levelName="Nivel 6" achievmentMedal="king" minLVL={6} imgUrl="LEVEL5.png">
                             <ul>
-                                <li>Nescecitas 1550XP para llegar aca.</li>
+                                <li>Nesecitas 1550XP para llegar aca.</li>
                                 <li>El nivel mas alto, donde los usuarios son lideres activos de la comunidad.</li>
                             </ul>
                         </LevelCard>
