@@ -15,8 +15,8 @@ const Settings = () => {
     const [BtnLoading, setBtnLoading] = createSignal(false);
 
     const handleSubmit = (e: Event) => {
+        e.preventDefault();
         if (darkTheme() || highContrast()) {
-            e.preventDefault();
             localStorage.setItem("theme", darkTheme() ? "dark" : "highContrast");
             setTheme(darkTheme() ? "dark" : "highContrast");
         } else {
