@@ -132,7 +132,7 @@ const MyPost = (props: Props) => {
 
                 class="w-full h-[20vh] z-[500] my-3 flex-col flex justify-center items-center touch-pan-x text-[var(--font-color-alt-2)]"
             >
-                <p class=" text-[var(--font-color-alt)] font-black text-2xl my-2">Escribe algo para {category()}</p>
+                <p class=" text-[var(--font-color-alt)] font-black text-xl my-2">Escribe algo para {category()}</p>
                 <div
                     ref={ref}
                     class="w-full h-full palette-gradient rounded-3xl px-4 mb-2 flex flex-row justify-center gap-5 shadow-lg shadow-[color:var(--color-primary)] touch-pan-x"
