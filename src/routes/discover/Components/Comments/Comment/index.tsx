@@ -21,15 +21,16 @@ const Comment = (props: Props) => {
                         <section class="flex flex-col w-full gap-1">
                             <section class="flex flex-row justify-center items-center gap-1">
                                 <img
-                                    onclick={(e) => {
-                                        e.preventDefault();
-                                        window.location.href = `/profile/${props.user_id}`
-                                    }}
                                     src={props.avatar_url}
                                     alt=""
-                                    class="rounded-full w-auto h-10 cursor-pointer object-cover aspect-square"
+                                    class="rounded-full w-auto h-10 object-cover"
                                 />
-                                <p class="font-bold w-[95%] text-md break-all">{props.user_name}</p>
+                                <p onPointerDown={
+                                    (e) => {
+                                        e.preventDefault();
+                                        window.location.href = `/users/${props.user_id}`
+                                    }
+                                } class="font-bold w-[95%] text-md break-all underline  cursor-pointer">{props.user_name}</p>
                             </section>
                             <ExpandedParagraph>{props.comment}</ExpandedParagraph>
                         </section>

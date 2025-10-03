@@ -68,7 +68,7 @@ const CommentLoader = (props: { post_id: string }) => {
     );
 
     return (
-        <div class=" w-full h-[80vh] flex overflow-y-auto items-center flex-col gap-4">
+        <div class=" w-full flex overflow-y-auto items-center flex-col gap-4">
             <MyComment post_id={props.post_id} />
             <For each={comments()}>
                 {(comment) => <Comment {...comment} />}
