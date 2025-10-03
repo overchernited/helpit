@@ -29,9 +29,9 @@ const ExpandedPost = (props: PostProps) => {
     let fontSize = Math.max(12, 24 - length * 0.1);
 
     return (
-        <main class="flex flex-col w-full h-full justify-center items-center text-[var(--font-color-alt-2)]">
+        <main class="flex flex-col w-full h-full justify-center items-center text-[var(--font-color-alt-2)] mt-10">
             <div
-                class="m-2 w-[90%] palette-gradient rounded-md flex flex-col items-center ">
+                class=" w-[90%] palette-gradient rounded-md flex flex-col items-center ">
                 <div
                     class=
                     "w-full rounded-md flex flex-row justify-center gap-5 transition-all"
@@ -62,9 +62,10 @@ const ExpandedPost = (props: PostProps) => {
 
                 </div>
             </div>
-
-            <h1 class="text-3xl font-bold">Comentarios</h1>
-            <CommentLoader post_id={props.id} />
+            <div class="h-auto w-full">
+                <h1 class="text-3xl font-bold">Comentarios</h1>
+                <CommentLoader post_id={props.id} />
+            </div>
         </main >
     )
 }
