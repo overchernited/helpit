@@ -88,24 +88,20 @@ const MyComment = (props: { post_id: string }) => {
                     class="w-full flex flex-row justify-center"
                 >
                     <main class="flex flex-col w-full relative">
-                        <article class="flex-row flex justify-between gap-5 p-5">
-                            <section class="flex flex-row w-full">
-                                <section class="flex flex-col items-center justify-center">
-                                    <img
-                                        src={authUser()?.user_metadata.avatar_url}
-                                        alt=""
-                                        class="rounded-full w-auto h-12 cursor-pointer object-cover"
-                                    />
-                                    <p class="font-bold line-clamp-1">{authUser()?.user_metadata.full_name}</p>
-                                </section>
-                                <textarea
-                                    value={text()}
-                                    onInput={(e) => setText(e.currentTarget.value)}
-                                    class="bg-transparent outline-0 mx-2 font-medium resize-none h-full w-full"
-                                    placeholder={`Escribe un comentario positivo!`}
-                                />
-                            </section>
-                        </article>
+                        <section class="flex flex-row items-center p-2">
+                            <img
+                                src={authUser()?.user_metadata.avatar_url}
+                                alt=""
+                                class="rounded-full w-auto h-12 cursor-pointer object-cover"
+                            />
+                            <p class="font-bold line-clamp-1 truncate">{authUser()?.user_metadata.full_name}</p>
+                        </section>
+                        <textarea
+                            value={text()}
+                            onInput={(e) => setText(e.currentTarget.value)}
+                            class="bg-transparent outline-0 mx-2 font-medium resize-none h-full w-full"
+                            placeholder={`Escribe un comentario positivo!`}
+                        />
                     </main>
 
                 </div>
