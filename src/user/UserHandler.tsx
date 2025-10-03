@@ -57,6 +57,15 @@ export const giveXp = async (amount: number) => {
         await supa.from("profiles").update({ xp: newXp, level: newLvl, achievments: newAchievements }).eq("id", userId);
         await supa.auth.updateUser({ data: { xp: newXp, level: newLvl, achievments: newAchievements } });
 
+        if (newLvl !== profile?.level) {
+            AddNotification({
+                message: `¡Has subido de nivel a ${newLvl}!`,
+                title: "Felicidades",
+                type: "congratulations",
+                duration: 5000
+            })
+        }
+
         await refreshUser();
 
         AddNotification({
