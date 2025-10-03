@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge"
 import { Motion } from "solid-motionone"
 
 
-export const [category, setCategory] = createSignal("*")
+export const [category, setCategory] = createSignal("general")
 
 interface CategorieProps {
     name: string
@@ -36,7 +36,7 @@ const Categories = () => {
         <>
             <p class="font-regular underline text-xl text-center text-[var(--font-color-alt)]">Categorias</p>
             <div class="flex flex-row gap-2 items-center justify-center flex-wrap w-[90vw] md:w-[40vw]">
-                <Categorie name="Todas" payload="*" />
+                <Categorie name="Todas" payload="general" />
                 <Categorie name="Discriminación" payload="discrimination" />
                 <Categorie name="Discapacidad" payload="disability" />
                 <Categorie name="LGBTQ+" payload="lgbtq" />

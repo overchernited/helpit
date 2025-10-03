@@ -118,8 +118,7 @@ const MyPost = (props: Props) => {
             <Motion.div
                 animate={{
                     y: isFocused() ? "-20%" : "0%",
-                    height: isFocused() ? "50vh" : "20vh",
-                    scale: isFocused() ? 1.1 : 1,
+                    height: isFocused() ? "40vh" : "20vh",
                 }}
                 transition={{ duration: 0.6, easing: [0.34, 1.56, 0.64, 1] }}
                 style={{ "transform-origin": "top center" }}
@@ -127,6 +126,9 @@ const MyPost = (props: Props) => {
 
                 class="w-full h-[20vh] z-[500] flex-col flex justify-center items-center touch-pan-x text-[var(--font-color-alt-2)]"
             >
+                <Show when={isFocused()} fallback={<></>}>
+                    <p class="font-bold text-[var(--font-color)]">Escribe algo para {category()}</p>
+                </Show>
                 <div
                     ref={ref}
                     class="w-full h-full palette-gradient rounded-3xl px-4 my-5 flex flex-row justify-center gap-5 shadow-lg shadow-[color:var(--color-primary)] touch-pan-x"
@@ -148,7 +150,7 @@ const MyPost = (props: Props) => {
                                 value={title()}
                                 onInput={(e) => setTitle(e.currentTarget.value)}
                                 class="bg-transparent outline-0 font-bold text-xl w-full"
-                                placeholder="¿En que piensas?"
+                                placeholder={`Escribe un título para tu publicación.`}
                             />
                         </section>
                         <textarea
@@ -157,7 +159,7 @@ const MyPost = (props: Props) => {
                             value={text()}
                             onInput={(e) => setText(e.currentTarget.value)}
                             class="bg-transparent outline-0 font-medium resize-none h-full"
-                            placeholder={`Escríbe algo para ${category()}`}
+                            placeholder="¿Qué estás pensando?"
                         />
                         <div class="text-center m-2">
                             <Show when={isFocused()}>

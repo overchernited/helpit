@@ -127,7 +127,7 @@ const User = () => {
                                 </For>
                             </section>
                             <h2 class="text-2xl font-medium">Publicaciones</h2>
-                            <PostLoader userId={user()?.id} category="*" />
+                            <PostLoader userId={user()?.id} category="general" />
                         </main>
                     </div>
                 </Show>
