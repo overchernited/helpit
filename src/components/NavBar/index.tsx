@@ -84,7 +84,7 @@ const Navbar = () => {
                             <p class="text-xs absolute translate-y-[100%] mt-5">LVL {authUser()?.user_metadata.level}</p>
                         </div>
                         <NButton redirect="/discover"><i class="fa-solid fa-magnifying-glass"></i></NButton>
-                        <NButton redirect="/discover"><i class="fa-solid fa-plus"></i></NButton>
+                        <NButton redirect="/flubberai"><i class="fa-solid fa-robot"></i></NButton>
                     </Motion.div>
                 </Show>
             </Presence>
