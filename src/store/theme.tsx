@@ -1,4 +1,4 @@
-import { onMount, createSignal, createEffect } from "solid-js"
+import { onMount, createSignal, createEffect, Accessor } from "solid-js"
 export const [theme, setTheme] = createSignal('light');
 
 
@@ -52,6 +52,7 @@ const Theme = () => {
     onMount(() => {
         let theme = localStorage.getItem('theme')
         cacheTheme = theme ?? 'light'
+        console.log(theme, );
 
         if (theme === null) {
             localStorage.setItem('theme', 'light');
@@ -62,10 +63,12 @@ const Theme = () => {
         loadTheme(theme ?? 'light');
     });
 
+
     createEffect(() => {
-        if (theme() !== cacheTheme) {
+        if (cacheTheme !== theme()) {
             loadTheme(theme());
-        };
+            cacheTheme = theme();
+        }
     });
 
     return null
