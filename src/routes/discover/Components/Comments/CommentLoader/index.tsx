@@ -1,4 +1,4 @@
-import { For, createSignal, onCleanup, onMount } from "solid-js";
+import { For, Show, createSignal, onCleanup, onMount } from "solid-js";
 import Comment from "../Comment";
 import MyComment from "../MyComment";
 import supa from "~/lib/supabase";
@@ -73,6 +73,9 @@ const CommentLoader = (props: { post_id: string }) => {
             <For each={comments()}>
                 {(comment) => <Comment {...comment} />}
             </For>
+            <Show when={comments().length === 0} fallback={<></>}>
+                <p class="font-bold text-lg text-[var(--color-tertiary)]">No hay comentarios aún</p>
+            </Show>
         </div>
     )
 }
