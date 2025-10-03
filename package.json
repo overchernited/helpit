@@ -3,10 +3,12 @@
   "type": "module",
   "scripts": {
     "dev": "vinxi dev --host",
+    "supa": "pnpx supabase start",
     "build": "vinxi build",
     "start": "vinxi start"
   },
   "dependencies": {
+    "@huggingface/inference": "^4.10.0",
     "@solid-primitives/gestures": "^1.2.0",
     "@solidjs/router": "^0.15.0",
     "@solidjs/start": "^1.1.0",
