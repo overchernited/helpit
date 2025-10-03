@@ -25,7 +25,7 @@ const Discover = () => {
                     <SearchBar />
                     <Show when={userSignUpState() === "FIRST_TIME"}>
                         <div class="mt-5 text-center">
-                            <p class="text-[var(--font-color-alt)] font-bold text-2xl">¿Primera vez aca? </p>
+                            <p class="text-[var(--font-color-alt)] font-bold text-2xl">¿Primera vez acá? </p>
                             <p class="text-[var(--font-color-alt)] font-bold text-md">¡Visita estas secciones! </p>
                         </div>
                         <div class="flex items-center justify-center gap-2 text-[var(--font-color-alt)]">
@@ -33,10 +33,10 @@ const Discover = () => {
                             <a href="/settings" class="cursor-pointer rounded-full text-center border-2 border-[var(--font-color-alt)] px-2">Configuraciones <i class="fa-solid fa-up-right-from-square"></i></a>
                             <a href={`/users/${authUser()?.id}`} class="cursor-pointer rounded-full text-center border-2 border-[var(--font-color-alt)] px-2">Tu usuario <i class="fa-solid fa-up-right-from-square"></i></a>
                         </div>
-                        <p class="text-[var(--font-color-alt-2)] font-bold text-md">O tambien puedes:</p>
+                        <p class="text-[var(--font-color-alt-2)] font-bold text-md">O también puedes:</p>
                         <a href="/flubberai" target="_blank" class=" cursor-pointer rounded-lg text-md text-center text-[var(--font-color-alt)] border-2 border-[var(--font-color-alt)] p-3">Hablar con Flubber AI <i class="fa-solid fa-up-right-from-square"></i></a>
                     </Show>
-                    <h1 class="text-center font-extrabold text-4xl  text-[var(--font-color-alt)]">¿Nescecitas mas ayuda?</h1>
+                    <h1 class="text-center font-extrabold text-4xl  text-[var(--font-color-alt)]">¿Nesecitas más ayuda?</h1>
                     <div class="flex flex-col justify-center items-center gap-1 w-[90vw] text-[var(--font-color-alt-2)]">
                         Linea 106 (CO) & 300 754 8933
                         <a class="underline" href="https://bogota.gov.co/mi-ciudad/salud/lineas-de-atencion-para-personas-que-sufren-de-ansiedad-y-depresion">Lee más articulos de ayuda aca.
