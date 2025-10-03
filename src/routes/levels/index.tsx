@@ -30,31 +30,31 @@ const Levels = () => {
                         </LevelCard>
                         <LevelCard levelName="Nivel 2" achievmentMedal="friendly" minLVL={2}>
                             <ul>
-                                <li>Nescecitas 150XP para llegar aca.</li>
+                                <li>Nescecitas 50XP para llegar aca.</li>
                                 <li>El inicio del viaje, donde los usuarios dan sus primeros pasos como criaturas que ayudan a la comunidad.</li>
                             </ul>
                         </LevelCard>
                         <LevelCard levelName="Nivel 3" achievmentMedal="partnerly" minLVL={3}>
                             <ul>
-                                <li>Nescecitas 350XP para llegar aca.</li>
+                                <li>Nescecitas 150XP para llegar aca.</li>
                                 <li>Usuarios que empiazan a conectar y apoyar a otros.</li>
                             </ul>
                         </LevelCard>
                         <LevelCard levelName="Nivel 4" achievmentMedal="listener" minLVL={4}>
                             <ul>
-                                <li>Nescecitas 750XP para llegar aca.</li>
+                                <li>Nescecitas 350XP para llegar aca.</li>
                                 <li>Criaturas que escuchan con atencion y aportan empatia a la comunidad</li>
                             </ul>
                         </LevelCard>
                         <LevelCard levelName="Nivel 5" achievmentMedal="guardian" minLVL={5}>
                             <ul>
-                                <li>Nescecitas 1550XP para llegar aca.</li>
+                                <li>Nescecitas 750XP para llegar aca.</li>
                                 <li>Criaturas que protegen y cuidan el espacio de la comunidad</li>
                             </ul>
                         </LevelCard>
                         <LevelCard levelName="Nivel 6" achievmentMedal="king" minLVL={6}>
                             <ul>
-                                <li>Nescecitas 3150XP para llegar aca.</li>
+                                <li>Nescecitas 1550XP para llegar aca.</li>
                                 <li>El nivel mas alto, donde los usuarios son lideres activos de la comunidad.</li>
                             </ul>
                         </LevelCard>
