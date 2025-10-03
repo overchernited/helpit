@@ -9,7 +9,12 @@ import { AddNotification } from "~/components/Notifications";
 import { giveXp } from "~/user/UserHandler";
 import { category } from "../Categories";
 
-const MyPost = () => {
+
+interface Props {
+    onCreate: () => void
+}
+
+const MyPost = (props: Props) => {
     const [isFocused, setIsFocused] = createSignal(false);
     const [visible, setVisible] = createSignal(true);
 
@@ -21,12 +26,6 @@ const MyPost = () => {
     const handleFocus = () => {
         setIsFocused(true);
     };
-
-    const handleScroll = () => {
-        if (ref) {
-            ref.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-    }
 
     const handleBlur = () => {
         setTimeout(() => {
@@ -93,9 +92,9 @@ const MyPost = () => {
         await uploadPostHandle()
         setText("")
         setTitle("")
+        props.onCreate()
         await giveXp(10)
         setIsFocused(false)
-
 
     };
 

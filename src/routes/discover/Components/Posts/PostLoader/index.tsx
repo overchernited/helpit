@@ -1,6 +1,6 @@
 import Post from "../Post";
 import supa from "~/lib/supabase";
-import { onMount, createSignal, For, Show, createEffect, onCleanup } from "solid-js";
+import { onMount, createSignal, For, Show, createEffect, onCleanup, Accessor } from "solid-js";
 import Button from "~/components/Button";
 import { RealtimeChannel } from "@supabase/supabase-js";
 
@@ -15,7 +15,14 @@ interface PostData {
     created_at: string;
 }
 
-function PostLoader(props: { userId?: string; category: string }) {
+
+interface Props {
+    userId?: string;
+    category: string;
+    signal?: number;
+}
+
+function PostLoader(props: Props) {
     const [posts, setPosts] = createSignal<PostData[]>([]);
     const [offset, setOffset] = createSignal(0);
     const [loading, setLoading] = createSignal(false);
@@ -48,60 +55,36 @@ function PostLoader(props: { userId?: string; category: string }) {
             setPosts(data as PostData[]);
         }
 
+        console.log(posts())
         setOffset((prev) => prev + (data?.length || 0));
         setLoading(false);
     };
 
-    const handlePayload = (payload: any) => {
 
-        if (payload.eventType === "INSERT") {
-            const newPost = payload.new as PostData;
-            if (props.userId && newPost?.user_id !== props.userId) return;
-            if (props.category !== "*" && newPost?.category !== props.category) return;
-            setPosts((prev) => [newPost, ...prev]);
+    const GetLatestPost = async () => {
+        const { data, error } = await supa
+            .from("posts")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(1);
+
+        if (error) {
+            console.error(error);
+            return;
         }
 
-        if (payload.eventType === "UPDATE") {
-            const newPost = payload.new as PostData;
-            if (props.userId && newPost?.user_id !== props.userId) return;
-            if (props.category !== "*" && newPost?.category !== props.category) return;
-            setPosts((prev) => prev.map((p) => (p.id === newPost.id ? newPost : p)));
-        }
-
-        if (payload.eventType === "DELETE") {
-            const oldPost = payload.old as PostData;
-            if (props.userId && oldPost?.user_id !== props.userId) return;
-            if (props.category !== "*" && oldPost?.category !== props.category) return;
-            setPosts((prev) => prev.filter((p) => p.id !== oldPost.id));
-        }
-    };
-    const setupChannel = () => {
-        if (channel) supa.removeChannel(channel);
-
-        channel = supa
-            .channel(`realtime:posts:${props.userId ?? "all"}:${props.category}`)
-            .on(
-                "postgres_changes",
-                { event: "*", schema: "public", table: "posts" },
-                handlePayload
-            )
-            .subscribe();
-
-        channel
-            .on("system", { event: "error" }, (payload) => {
-                if (payload.message === "Subscribed to PostgreSQL") {
-                    return;
+        if (data && data.length > 0) {
+            setPosts((prev) => {
+                if (prev.length > 0 && prev[0].id === data[0].id) {
+                    return prev;
                 }
-            })
-
-        console.log("Realtime channel: [ALIVE]");
+                return [data[0], ...prev];
+            });
+        }
     };
 
-    // 📌 Ciclo de vida
     onMount(() => {
         GetPosts();
-        setupChannel();
-
     });
 
     onCleanup(() => {
@@ -114,6 +97,15 @@ function PostLoader(props: { userId?: string; category: string }) {
             setOffset(0);
             setPosts([]);
             GetPosts();
+        }
+    });
+
+    let cacheSignal = props.signal
+
+    createEffect(() => {
+        if (props.signal !== cacheSignal) {
+            GetLatestPost();
+            cacheSignal = props.signal;
         }
     });
 
