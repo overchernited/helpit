@@ -101,7 +101,7 @@ const User = () => {
                         <main class="flex flex-col items-center w-[90vw] my-4 gap-2 ">
                             <div class="flex flex-col items-center my-4">
                                 <article class="flex flex-row justify-center items-center gap-2">
-                                    <img src={user()?.avatar_url} class="w-32 h-32 rounded-xl" alt="User avatar image" />
+                                    <img src={user()?.avatar_url} class="w-auto h-32 rounded-xl" alt="User avatar image" />
                                     <section class="flex flex-col">
                                         <h1 class="text-2xl md:text-3xl font-bold line-clamp-2 break-all">{user()?.full_name}</h1>
                                         <h1 class="text-xl font-bold">NIVEL {user()?.level}</h1>
