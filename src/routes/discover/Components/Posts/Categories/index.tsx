@@ -21,7 +21,7 @@ const Categorie = (Props: CategorieProps) => {
     return (
         <Motion.button
             hover={{ scale: 1.1 }}
-            onclick={handleClick} class={twMerge("cursor-pointer justify-center flex w-auto flex-row gap-2 items-center border-2 text-[var(--font-color-alt)] border-[var(--font-color--alt)] rounded-full px-4 py-1", category() === Props.payload && "bg-[var(--font-color-alt)] text-[var(--background)]")}>
+            onclick={handleClick} class={twMerge("cursor-pointer text-xs md:text-base justify-center flex w-auto flex-row gap-2 items-center border-2 text-[var(--font-color-alt)] border-[var(--font-color--alt)] rounded-full px-4 py-1", category() === Props.payload && "bg-[var(--font-color-alt)] text-[var(--background)]")}>
             <Show when={category() === Props.payload} fallback={<></>}>
                 <li class="fa fa-solid fa-check"></li>
             </Show>
@@ -34,8 +34,8 @@ const Categorie = (Props: CategorieProps) => {
 const Categories = () => {
     return (
         <>
-            <p class="font-regular underline text-xl text-center text-[var(--font-color-alt)]">Categorias</p>
-            <div class="flex flex-row gap-2 items-center justify-center flex-wrap w-[90vw] md:w-[40vw]">
+            <p class="font-regular underline text-xl text-center text-[var(--font-color-alt)] my-2">Categorias</p>
+            <div class="flex flex-row gap-2 items-center justify-center flex-wrap w-[100vw] md:w-[40vw]">
                 <Categorie name="Todas" payload="general" />
                 <Categorie name="Discriminación" payload="discrimination" />
                 <Categorie name="Discapacidad" payload="disability" />
