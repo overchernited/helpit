@@ -29,7 +29,7 @@ const ExpandedPost = (props: PostProps) => {
     let fontSize = Math.max(12, 24 - length * 0.1);
 
     return (
-        <main class="flex flex-col w-full h-full justify-center items-center text-[var(--font-color-alt-2)] mt-10">
+        <main class="flex flex-col w-full h-full items-center text-[var(--font-color-alt-2)] mt-2">
             <div
                 class=" w-[90%] palette-gradient rounded-md flex flex-col items-center ">
                 <div
@@ -47,7 +47,7 @@ const ExpandedPost = (props: PostProps) => {
                                             src={props.avatar_url}
                                             alt=""
                                             onpointerdown={() => { window.location.href = `/users/${props.user_id}` }}
-                                            class="rounded-full w-auto h-16 cursor-pointer object-cover"
+                                            class="rounded-full w-auto h-16 cursor-pointer"
                                         />
                                         <p class="font-bold w-[95%] text-xs break-all">{props.user_name}</p>
                                     </section>
