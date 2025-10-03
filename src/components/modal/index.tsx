@@ -34,7 +34,7 @@ const Modal = () => {
                         animate={modal().animate}
                         exit={modal().exit}
                         transition={{ duration: 0.3 }}
-                        class="w-full md:w-6/12 h-10/12 bg-[var(--background-alt)] rounded-3xl shadow-2xl shadow-zinc-800 p-4"
+                        class="w-full md:w-6/12 h-10/12 bg-[var(--background-alt)] rounded-3xl shadow-2xl shadow-zinc-800 p-4 overflow-y-auto"
                     >
                         {modal().content?.()}
                     </Motion.div>
