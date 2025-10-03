@@ -1,16 +1,20 @@
 import supa from "~/lib/supabase";
 import { AddNotification } from "~/components/Notifications";
+import { createSignal } from "solid-js";
+
 interface UserProps {
     avatar: number,
     password: string
     full_name: string
 
 }
+export const [signInLoading, setSignInLoading] = createSignal(false);
 
 const SignUp = async (props: UserProps) => {
+
     try {
-        localStorage.setItem("account", "true")
-        const { error } = await supa.auth.signUp({
+        setSignInLoading(true);
+        const { error, data } = await supa.auth.signUp({
             email: props.full_name + '@helpit.com',
             password: props.password,
             options: {
@@ -27,6 +31,9 @@ const SignUp = async (props: UserProps) => {
             console.error('Error creating anonymous account:', error);
             return;
         }
+
+        localStorage.setItem("account", "true")
+        setSignInLoading(false);
 
         AddNotification({
             message: "Bienvenido a helpit!",
