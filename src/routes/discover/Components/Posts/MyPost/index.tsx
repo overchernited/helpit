@@ -17,6 +17,7 @@ interface Props {
 const MyPost = (props: Props) => {
     const [isFocused, setIsFocused] = createSignal(false);
     const [visible, setVisible] = createSignal(true);
+    const [isButtonLoading, setIsButtonLoading] = createSignal(false);
 
     //Form State
     const [text, setText] = createSignal("");
@@ -56,6 +57,7 @@ const MyPost = (props: Props) => {
 
     const uploadPostHandle = async () => {
         try {
+            setIsButtonLoading(true)
             const { error } = await supa.from("posts").insert({
                 user_name: authUser()?.user_metadata.full_name,
                 avatar_url: authUser()?.user_metadata.avatar_url,
@@ -72,6 +74,9 @@ const MyPost = (props: Props) => {
         catch (error) {
             throw error
             return
+        }
+        finally {
+            setIsButtonLoading(false)
         }
     }
 
@@ -157,6 +162,7 @@ const MyPost = (props: Props) => {
                         <div class="text-center m-2">
                             <Show when={isFocused()}>
                                 <Button
+                                    isLoading={isButtonLoading()}
                                     type="submit"
                                     btnStyle="button-palette"
                                     class="w-[35%] text-xl"
