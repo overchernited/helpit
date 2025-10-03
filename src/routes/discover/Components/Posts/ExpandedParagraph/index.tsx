@@ -15,7 +15,7 @@ const ExpandedParagraph = (props: { children: JSX.Element }) => {
 
     return (
         <>
-            <p class={collapsed() ? "overflow-hidden text-ellipsis line-clamp-3" : ""} ref={textRef}>{props.children}</p>
+            <p class={collapsed() ? "overflow-hidden text-ellipsis line-clamp-[10]" : ""} ref={textRef}>{props.children}</p>
             <Show when={isClamped()} fallback={<></>}>
                 <button class="underline cursor-pointer"
                     onPointerDown={(e) => e.stopPropagation()}
