@@ -41,7 +41,7 @@ function PostLoader(props: Props) {
             .range(start, end);
 
         if (props.userId) query = query.eq("user_id", props.userId);
-        if (props.category !== "*") query = query.eq("category", props.category);
+        if (props.category !== "general") query = query.eq("category", props.category);
 
         setTimeout(async () => {
             const { data, error } = await query;
