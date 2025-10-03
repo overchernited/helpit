@@ -34,35 +34,6 @@ body {
   --font-color-alt-2: #ba5087;
 }
 
-.bg-gradient {
-  background: var(--background);
-  background: -webkit-linear-gradient(
-    120deg,
-    rgb(247, 189, 231) 0%,
-    var(--background) 50%,
-    rgb(141, 214, 235) 100%
-  );
-  background: -moz-linear-gradient(
-    120deg,
-    rgb(247, 189, 231) 0%,
-    var(--background) 50%,
-    rgb(141, 214, 235) 100%
-  );
-  background: linear-gradient(
-    120deg,
-    rgb(247, 189, 231) 0%,
-    var(--background) 50%,
-    rgb(141, 214, 235) 100%
-  );
-  filter: progid:DXImageTransform.Microsoft.gradient(
-  startColorstr="#F4D2EA",
-  endColorstr="#ABDCEA",
-  GradientType=0
-  );
-  background-size: 200% 200%;
-  animation: moveGradient 5s ease-in-out alternate infinite;
-}
-
 .button {
   padding: 0.5rem;
   cursor: pointer;
@@ -119,6 +90,11 @@ body {
 
 .success {
   background-color: #ba5087;
+  color: var(--font-color);
+}
+
+.congratulations {
+  background-color: #61bdff;
   color: var(--font-color);
 }
 
