@@ -1,4 +1,4 @@
-import { JSX } from "solid-js";
+import { JSX, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
 import { Motion } from "solid-motionone";
 
@@ -6,10 +6,11 @@ interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
     children?: JSX.Element;
     btnStyle: "button-palette" | "button-steel";
     class?: string;
+    isLoading?: boolean;
 }
 
 const Button = (props: ButtonProps) => {
-    // separar las props que controlas tú
+
     const { btnStyle, class: className, children, ...rest } = props;
 
     return (
@@ -22,7 +23,12 @@ const Button = (props: ButtonProps) => {
             class={twMerge(btnStyle, className, "button cursor-pointer")}
             {...rest}
         >
-            {children}
+            <Show when={!props.isLoading} fallback={<></>}>
+                {children}
+            </Show>
+            <Show when={props.isLoading} fallback={<></>}>
+                <i class="fa-solid fa-spinner animate-spin"></i>
+            </Show>
         </Motion.button>
     );
 };
