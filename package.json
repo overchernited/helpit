@@ -2,8 +2,7 @@
   "name": "helpit",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev --host",
-    "supa": "pnpx supabase start",
+    "dev": "pnpx supabase start && vinxi dev --host",
     "build": "vinxi build",
     "start": "vinxi start"
   },
@@ -12,6 +11,7 @@
     "@solid-primitives/gestures": "^1.2.0",
     "@solidjs/router": "^0.15.0",
     "@solidjs/start": "^1.1.0",
+    "@supabase/gotrue-js": "^2.72.0",
     "@supabase/supabase-js": "^2.57.4",
     "@use-gesture/vanilla": "^10.3.1",
     "bad-words": "^4.0.0",
