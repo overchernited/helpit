@@ -1,4 +1,4 @@
-import { Motion } from "solid-motionone"
+import { Motion, Presence } from "solid-motionone"
 import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js"
 import party from "party-js";
 import { twMerge } from "tailwind-merge";
@@ -27,6 +27,7 @@ const Post = (props: Props) => {
     const [visible, setVisible] = createSignal(false);
     const [heart, setHeart] = createSignal(false);
     const [comments, setComments] = createSignal(0);
+    const [deleted, setDeleted] = createSignal(false);
 
     const [reactiveHearts, setReactiveHearts] = createSignal(0);
     const [processing, setProcessing] = createSignal(false)
@@ -197,6 +198,24 @@ const Post = (props: Props) => {
         openModal({ content: () => <ExpandedPost {...props} /> })
     }
 
+    const handleDelete = async () => {
+        try {
+            const { error } = await supa.from("posts").delete().eq("id", props.id)
+
+            if (error) {
+                console.error(error)
+                return
+            }
+
+            setDeleted(true)
+
+
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+    }
+
     const getComments = async () => {
         try {
             const { error, data } = await supa.from("comments").select("*").eq("post_id", props.id)
@@ -256,85 +275,95 @@ const Post = (props: Props) => {
     let fontSize = Math.max(18, 28 - length * 0.1);
 
     return (
-        <Motion.div
-            ref={(el) => { ref = el; }}
-            initial={{ opacity: 0, y: 50, scale: 0.5 }}
-            animate={{
-                opacity: visible() ? 1 : 0,
-                scale: visible() ? 1 : 0.5,
-                y: visible() ? 0 : 50,
-            }}
-            class="select-none shadow-lg w-full text-[var(--font-color-alt-2)] palette-gradient shadow-[color:var(--color-primary)] rounded-lg flex flex-col items-center ">
-            <div
-                ref={cardRef}
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                class={twMerge(
-                    "w-full rounded-md bg-[var(--background)] flex flex-row justify-center gap-5  transition-all touch-pan-y select-none",
-                    dir() === "left" ? "-translate-x-50" : "translate-x-0",
-                )}
-            >
+        <Presence exitBeforeEnter>
+            <Show when={!deleted()}>
+                <Motion.div
+                    ref={ref}
+                    initial={{ opacity: 0, y: 50, scale: 0.5 }}
+                    animate={{
+                        opacity: visible() ? 1 : 0,
+                        scale: visible() ? 1 : 0.5,
+                        y: visible() ? 0 : 50,
+                    }}
+                    exit={{ opacity: 0, x: 200 }}
+                    class="select-none shadow-lg w-full text-[var(--font-color-alt-2)] palette-gradient shadow-[color:var(--color-primary)] rounded-lg flex flex-col items-center ">
+                    <div
+                        ref={cardRef}
+                        onPointerDown={handlePointerDown}
+                        onPointerMove={handlePointerMove}
+                        onPointerUp={handlePointerUp}
+                        class={twMerge(
+                            "w-full rounded-md bg-[var(--background)] flex flex-row justify-center gap-5  transition-all touch-pan-y select-none",
+                            dir() === "left" ? "-translate-x-50" : "translate-x-0",
+                        )}
+                    >
 
-                <main class="flex flex-col w-full relative">
-                    <section class="flex flex-col w-full p-2">
-                        <article class="flex flex-col items-start gap-2">
-                            <section class="flex flex-row justify-between items-center gap-3 w-full">
-                                <div class="w-[80%] flex flex-row items-center gap-2">
-                                    <img
-                                        src={props.avatar_url}
-                                        alt=""
-                                        class="rounded-full w-16 h-auto object-cover "
-                                    />
-                                    <p onpointerdown={
-                                        (e) => {
-                                            e.preventDefault();
-                                            window.location.href = `/users/${props.user_id}`
-                                        }
-                                    } class="font-bold break-all md:break-normal cursor-pointer text-lg underline inline-block">{props.user_name}</p>
-                                </div>
-                                <div class="border-2 border-[var(--font-color-alt)] px-2 w-auto text-center rounded-full text-[var(--font-color-alt)]">{props.category}</div>
+                        <main class="flex flex-col w-full relative">
+                            <section class="flex flex-col w-full p-2">
+                                <article class="flex flex-col items-start gap-2">
+                                    <section class="flex flex-row justify-between items-center gap-3 w-full">
+                                        <div class="w-[80%] flex flex-row items-center gap-2">
+                                            <img
+                                                src={props.avatar_url}
+                                                alt=""
+                                                class="rounded-full w-16 h-auto object-cover "
+                                            />
+                                            <p onpointerdown={
+                                                (e) => {
+                                                    e.preventDefault();
+                                                    window.location.href = `/users/${props.user_id}`
+                                                }
+                                            } class="font-bold break-all md:break-normal cursor-pointer text-lg underline inline-block">{props.user_name}</p>
+                                        </div>
+                                        <div class="border-2 border-[var(--font-color-alt)] px-2 w-auto text-center rounded-full text-[var(--font-color-alt)]">{props.category}</div>
+                                    </section>
+
+
+                                    <h1 style={{ "font-size": `${fontSize}px` }} class={`font-extrabold w-full`}>{props.title}</h1>
+                                </article>
+                                <ExpandedParagraph>{props.text}</ExpandedParagraph>
                             </section>
+                        </main>
 
-
-                            <h1 style={{ "font-size": `${fontSize}px` }} class={`font-extrabold w-full`}>{props.title}</h1>
-                        </article>
-                        <ExpandedParagraph>{props.text}</ExpandedParagraph>
+                    </div>
+                    <Motion.aside
+                        initial={{ width: 0 }}
+                        animate={dir() === "left" ? { width: "30%" } : { width: 0 }}
+                        transition={{ duration: 0.3 }}
+                        class={"flex flex-col text-2xl justify-center right-0 h-full absolute items-center bg-red-600 text-white rounded-r-md xl"} >
+                        <Motion.i
+                            initial={{ width: 0, opacity: 0 }}
+                            animate={dir() === "left" ? { opacity: 1 } : { opacity: 0 }}
+                            class="fa-solid fa-heart"></Motion.i>
+                    </Motion.aside>
+                    <section class="flex flex-row justify-center items-center gap-5 w-full h-5  text-xl shadow-2xl p-5">
+                        <Motion.button
+                            ref={BtnRef}
+                            animate={heart() ? { scale: [0.5, 1], color: "red" } : { color: "var(--font-color-alt-2)" }}
+                            transition={{ duration: 0.3, easing: [0.34, 1.56, 0.64, 1] }}
+                            class="flex items-center gap-2 cursor-pointer"
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onTouchStart={(e) => e.stopPropagation()}
+                            onclick={(e) => {
+                                e.stopPropagation();
+                                handleHeart();
+                            }}>
+                            <i class={heart() ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
+                            <span>{reactiveHearts()}</span>
+                        </Motion.button>
+                        <button class="flex items-center gap-2 cursor-pointer" onclick={handleComment}>
+                            <i class="fa-regular fa-comment"></i>
+                            <span>{comments()}</span>
+                        </button>
+                        <Show when={authUser() && authUser()?.id === props.user_id}>
+                            <button class="flex items-center gap-2 cursor-pointer text-red-600" onclick={handleDelete}>
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </Show>
                     </section>
-                </main>
-
-            </div>
-            <Motion.aside
-                initial={{ width: 0 }}
-                animate={dir() === "left" ? { width: "30%" } : { width: 0 }}
-                transition={{ duration: 0.3 }}
-                class={"flex flex-col text-2xl justify-center right-0 h-full absolute items-center bg-red-600 text-white rounded-r-md xl"} >
-                <Motion.i
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={dir() === "left" ? { opacity: 1 } : { opacity: 0 }}
-                    class="fa-solid fa-heart"></Motion.i>
-            </Motion.aside>
-            <section class="flex flex-row justify-center items-center gap-5 w-full h-5  text-xl shadow-2xl p-5">
-                <Motion.button
-                    ref={BtnRef}
-                    animate={heart() ? { scale: [0.5, 1], color: "red" } : { color: "var(--font-color-alt-2)" }}
-                    transition={{ duration: 0.3, easing: [0.34, 1.56, 0.64, 1] }}
-                    class="flex items-center gap-2 cursor-pointer"
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onTouchStart={(e) => e.stopPropagation()}
-                    onclick={(e) => {
-                        e.stopPropagation();
-                        handleHeart();
-                    }}>
-                    <i class={heart() ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
-                    <span>{reactiveHearts()}</span>
-                </Motion.button>
-                <button class="flex items-center gap-2 cursor-pointer" onclick={handleComment}>
-                    <i class="fa-regular fa-comment"></i>
-                    <span>{comments()}</span>
-                </button>
-            </section>
-        </Motion.div >
+                </Motion.div >
+            </Show>
+        </Presence>
     );
 };
 
