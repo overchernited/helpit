@@ -28,36 +28,39 @@ function PostLoader(props: Props) {
     const [loading, setLoading] = createSignal(false);
     const limit = 10;
     let cacheCategory = props.category;
-    let channel: RealtimeChannel | null = null;
-    const GetPosts = async (loadMore = false) => {
+    const GetPosts = async (loadMore = false, reset = false) => {
         setLoading(true);
+
+        const start = reset ? 0 : offset();
+        const end = start + limit - 1;
 
         let query = supa
             .from("posts")
             .select("*")
             .order("created_at", { ascending: false })
-            .range(offset(), offset() + limit - 1);
+            .range(start, end);
 
         if (props.userId) query = query.eq("user_id", props.userId);
         if (props.category !== "*") query = query.eq("category", props.category);
 
-        const { data, error } = await query;
+        setTimeout(async () => {
+            const { data, error } = await query;
+            if (error) {
+                console.error(error);
+                setLoading(false);
+                return;
+            }
 
-        if (error) {
-            console.error(error);
+            if (loadMore) {
+                setPosts((prev) => [...prev, ...(data as PostData[])]);
+            } else {
+                setPosts(data as PostData[]);
+            }
+
+            setOffset(start + (data?.length || 0));
             setLoading(false);
-            return;
-        }
+        });
 
-        if (loadMore) {
-            setPosts((prev) => [...prev, ...(data as PostData[])]);
-        } else {
-            setPosts(data as PostData[]);
-        }
-
-        console.log(posts())
-        setOffset((prev) => prev + (data?.length || 0));
-        setLoading(false);
     };
 
 
@@ -83,22 +86,24 @@ function PostLoader(props: Props) {
         }
     };
 
+
     onMount(() => {
         GetPosts();
-    });
+        supa.auth.startAutoRefresh();
+
+    })
 
     onCleanup(() => {
-        if (channel) supa.removeChannel(channel);
+        supa.auth.stopAutoRefresh();
     });
 
     createEffect(() => {
         if (cacheCategory !== props.category) {
             cacheCategory = props.category;
-            setOffset(0);
-            setPosts([]);
-            GetPosts();
+
+            GetPosts(false, true);
         }
-    });
+    }, [props.category, cacheCategory]);
 
     let cacheSignal = props.signal
 
