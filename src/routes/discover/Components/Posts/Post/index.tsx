@@ -282,17 +282,16 @@ const Post = (props: Props) => {
                             <section class="flex flex-row justify-between items-center gap-3 w-full">
                                 <div class="w-[80%] flex flex-row items-center gap-2">
                                     <img
-                                        onPointerDown={
-                                            (e) => {
-                                                e.preventDefault();
-                                                window.location.href = `/users/${props.user_id}`
-                                            }
-                                        }
                                         src={props.avatar_url}
                                         alt=""
-                                        class="rounded-full w-16 h-auto cursor-pointer object-cover "
+                                        class="rounded-full w-16 h-auto object-cover "
                                     />
-                                    <p class="font-bold break-all md:break-normal text-lg  inline-block">{props.user_name}</p>
+                                    <p onpointerdown={
+                                        (e) => {
+                                            e.preventDefault();
+                                            window.location.href = `/users/${props.user_id}`
+                                        }
+                                    } class="font-bold break-all md:break-normal cursor-pointer text-lg underline inline-block">{props.user_name}</p>
                                 </div>
                                 <div class="border-2 border-[var(--font-color-alt)] px-2 w-auto text-center rounded-full text-[var(--font-color-alt)]">{props.category}</div>
                             </section>
