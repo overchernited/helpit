@@ -41,8 +41,11 @@ const Login = () => {
 
             if (error) {
                 console.error(error);
+                AddNotification({ message: `Un error ha sucedido: ${error}`, title: "Oops!", type: "success", duration: 3000 })
                 return
             }
+
+            AddNotification({ message: "Bienvenidx de vuelta!", title: "Iniciaste sesión!", type: "success", duration: 3000 })
         } catch (error) {
             console.error(error);
             return
