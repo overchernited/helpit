@@ -12,6 +12,7 @@ import { authUser } from "~/user/UserHandler";
 const Settings = () => {
     const [darkTheme, setDarkTheme] = createSignal(false);
     const [highContrast, setHighContrast] = createSignal(false);
+    const [BtnLoading, setBtnLoading] = createSignal(false);
 
     const handleSubmit = (e: Event) => {
         if (darkTheme() || highContrast()) {
@@ -43,6 +44,7 @@ const Settings = () => {
 
     const handleSignOut = async () => {
         try {
+            setBtnLoading(true)
             const { error } = await supa.auth.signOut()
             if (error) {
                 console.error(error);
@@ -52,6 +54,8 @@ const Settings = () => {
         } catch (error) {
             console.log(error);
             throw error
+        } finally {
+            setBtnLoading(false)
         }
     }
 
@@ -66,7 +70,7 @@ const Settings = () => {
                         <section class="flex flex-col items-center">
                             <img width={150} height={150} class="rounded-lg" src={authUser()?.user_metadata.avatar_url}></img>
                             <h1 class="font-bold text-xl">{authUser()?.user_metadata.full_name}</h1>
-                            <Button class="my-2" btnStyle="button-palette" onClick={handleSignOut}>Cerrar sesión</Button>
+                            <Button class="my-2" btnStyle="button-palette" isLoading={BtnLoading()} onClick={handleSignOut}>Cerrar sesión</Button>
                         </section>
 
                         <form onsubmit={(e: Event) => handleSubmit(e)} class="text-center">

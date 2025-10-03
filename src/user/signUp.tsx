@@ -33,7 +33,6 @@ const SignUp = async (props: UserProps) => {
         }
 
         localStorage.setItem("account", "true")
-        setSignInLoading(false);
 
         AddNotification({
             message: "Bienvenido a helpit!",
@@ -44,6 +43,8 @@ const SignUp = async (props: UserProps) => {
     } catch (error) {
         console.error('Error creating anonymous account:', error);
         return;
+    } finally {
+        setSignInLoading(false);
     }
 }
 
