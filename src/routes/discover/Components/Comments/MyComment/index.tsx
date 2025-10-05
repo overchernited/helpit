@@ -91,7 +91,7 @@ const MyComment = (props: { post_id: string }) => {
                         <section class="flex flex-row items-center p-2">
                             <img
                                 src={authUser()?.user_metadata.avatar_url}
-                                alt=""
+                                alt={`${authUser()?.user_metadata.full_name} avatar`}
                                 class="rounded-full w-auto h-12 cursor-pointer object-cover"
                             />
                             <p class="font-bold line-clamp-1 truncate">{authUser()?.user_metadata.full_name}</p>

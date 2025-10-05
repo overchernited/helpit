@@ -137,26 +137,24 @@ const MyPost = (props: Props) => {
                     ref={ref}
                     class="w-full h-full palette-gradient rounded-3xl px-4 mb-2 flex flex-row justify-center gap-5 shadow-lg shadow-[color:var(--color-primary)] touch-pan-x"
                 >
-                    <form class="flex flex-col h-full w-full" onsubmit={handleSubmit} onkeydown={(e) => e.key === "Enter" && e.preventDefault()}>
-                        <section class="flex flex-row justify-center items-center">
-                            <article class="flex flex-col justify-center items-center">
-                                <img
-                                    src={authUser()?.user_metadata.avatar_url}
-                                    class="w-auto h-16 rounded-full mt-5 object-cover "
-                                    alt="user avatar"
-                                />
-                                <p class="font-bold w-full truncate">{authUser()?.user_metadata.full_name}</p>
-                            </article>
-                            <input
-                                type="text"
-                                onFocus={handleFocus}
-                                onBlur={handleBlur}
-                                value={title()}
-                                onInput={(e) => setTitle(e.currentTarget.value)}
-                                class="bg-transparent outline-0 font-bold text-md md:text-xl w-full"
-                                placeholder={`Titulo para tu publicación`}
+                    <form class="flex flex-col h-full w-full p-2 gap-2" onsubmit={handleSubmit} onkeydown={(e) => e.key === "Enter" && e.preventDefault()}>
+                        <div class="flex flex-row items-center w-full">
+                            <img
+                                src={authUser()?.user_metadata.avatar_url}
+                                class="w-auto h-16 rounded-full object-cover "
+                                alt="user avatar"
                             />
-                        </section>
+                            <p class="font-bold w-full truncate">{authUser()?.user_metadata.full_name}</p>
+                        </div>
+                        <input
+                            type="text"
+                            onFocus={handleFocus}
+                            onBlur={handleBlur}
+                            value={title()}
+                            onInput={(e) => setTitle(e.currentTarget.value)}
+                            class="bg-transparent outline-0 font-bold text-md md:text-xl w-full "
+                            placeholder={`Titulo para tu publicación`}
+                        />
                         <textarea
                             onFocus={handleFocus}
                             onBlur={handleBlur}

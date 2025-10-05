@@ -305,15 +305,10 @@ const Post = (props: Props) => {
                                         <div class="w-[80%] flex flex-row items-center gap-2">
                                             <img
                                                 src={props.avatar_url}
-                                                alt=""
+                                                alt={`${props.user_name} avatar`}
                                                 class="rounded-full w-16 h-auto object-cover "
                                             />
-                                            <p onpointerdown={
-                                                (e) => {
-                                                    e.preventDefault();
-                                                    window.location.href = `/users/${props.user_id}`
-                                                }
-                                            } class="font-bold break-all md:break-normal cursor-pointer text-lg underline inline-block">{props.user_name}</p>
+                                            <a href={`/users/${props.user_id}`} class={twMerge("font-bold break-all md:break-normal cursor-pointer text-lg underline inline-block", props.user_name === authUser()?.user_metadata.full_name ? "text-[var(--color-primary)]" : "")}>{props.user_name}</a>
                                         </div>
                                         <div class="border-2 border-[var(--font-color-alt)] px-2 w-auto text-center rounded-full text-[var(--font-color-alt)]">{props.category}</div>
                                     </section>

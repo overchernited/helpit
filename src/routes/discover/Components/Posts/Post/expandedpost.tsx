@@ -1,6 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import ExpandedParagraph from "../ExpandedParagraph";
 import CommentLoader from "../../Comments/CommentLoader";
+import { authUser } from "~/user/UserHandler";
 type PostProps = {
     avatar_url: string,
     user_name: string,
@@ -41,18 +42,15 @@ const ExpandedPost = (props: PostProps) => {
                         <article class="flex-row flex justify-between gap-5 p-5">
 
                             <section class="flex flex-col w-full">
-                                <article class="flex flex-row items-center gap-5">
-                                    <section class="flex flex-col justify-center items-center">
-                                        <img
-                                            src={props.avatar_url}
-                                            alt=""
-                                            onpointerdown={() => { window.location.href = `/users/${props.user_id}` }}
-                                            class="rounded-full w-auto h-16 cursor-pointer"
-                                        />
-                                        <p class="font-bold w-[95%] text-xs break-all">{props.user_name}</p>
-                                    </section>
-                                    <h1 style={{ "font-size": `${fontSize}px` }} class="font-extrabold w-full">{props.title}</h1>
-                                </article>
+                                <section class="flex flex-row w-full items-center">
+                                    <img
+                                        src={props.avatar_url}
+                                        alt={`${props.user_name} avatar`}
+                                        class="rounded-full w-auto h-16 cursor-pointer"
+                                    />
+                                    <a href={`/users/${props.user_id}`} class={twMerge("font-bold break-all md:break-normal cursor-pointer text-lg underline inline-block", props.user_name === authUser()?.user_metadata.full_name ? "text-[var(--color-primary)]" : "")}>{props.user_name}</a>
+                                </section>
+                                <h1 style={{ "font-size": `${fontSize}px` }} class="font-extrabold w-full">{props.title}</h1>
                                 <ExpandedParagraph>{props.text}</ExpandedParagraph>
                             </section>
 

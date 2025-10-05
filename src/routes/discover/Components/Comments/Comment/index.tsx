@@ -1,4 +1,6 @@
 import ExpandedParagraph from "../../Posts/ExpandedParagraph"
+import { authUser } from "~/user/UserHandler"
+import { twMerge } from "tailwind-merge"
 
 interface Props {
     avatar_url: string
@@ -17,25 +19,17 @@ const Comment = (props: Props) => {
                 class="w-full p-1 flex flex-row justify-center select-none border-b-1 border-[var(--background)] text-[var(--font-color)]"
             >
                 <main class="flex flex-col w-full relative">
-                    <article class="flex-row flex justify-between">
-                        <section class="flex flex-col w-full gap-1">
-                            <section class="flex flex-row justify-center items-center gap-1">
-                                <img
-                                    src={props.avatar_url}
-                                    alt=""
-                                    class="rounded-full w-auto h-10 object-cover"
-                                />
-                                <p onPointerDown={
-                                    (e) => {
-                                        e.preventDefault();
-                                        window.location.href = `/users/${props.user_id}`
-                                    }
-                                } class="font-bold w-[95%] text-md break-all underline  cursor-pointer">{props.user_name}</p>
-                            </section>
-                            <ExpandedParagraph>{props.comment}</ExpandedParagraph>
+                    <section class="flex flex-col w-full gap-1">
+                        <section class="flex flex-row items-center gap-1">
+                            <img
+                                src={props.avatar_url}
+                                alt={`${props.user_name} avatar`}
+                                class="rounded-full w-auto h-10 object-cover"
+                            />
+                            <a href={`/users/${props.user_id}`} class={twMerge("font-bold break-all md:break-normal cursor-pointer text-lg underline inline-block", props.user_name === authUser()?.user_metadata.full_name ? "text-[var(--color-primary)]" : "")}>{props.user_name}</a>
                         </section>
-
-                    </article>
+                        <ExpandedParagraph>{props.comment}</ExpandedParagraph>
+                    </section>
 
                 </main>
 
