@@ -1,13 +1,14 @@
 import { Motion, Presence } from "solid-motionone"
-import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js"
+import { createSignal, onCleanup, onMount, Show } from "solid-js"
 import party from "party-js";
 import { twMerge } from "tailwind-merge";
-import { JSX } from "solid-js";
 import supa from "~/lib/supabase";
 import { authUser, giveXp } from "~/user/UserHandler";
-import { modal, openModal, setModal } from "~/store/modal";
+import { openModal } from "~/store/modal";
 import ExpandedParagraph from "../ExpandedParagraph";
 import ExpandedPost from "./expandedpost";
+import { AddNotification } from "~/components/Notifications";
+import Report from "../../Report";
 
 
 
@@ -138,11 +139,31 @@ const Post = (props: Props) => {
                 setProcessing(true);
                 setReactiveHearts(prev => prev + 1);
                 await giveXp(10)
-                const { data, error } = await supa.from("hearts").insert({
+                const { error: insertError } = await supa.from("hearts").insert({
                     post_id: props.id,
                     owner_id: props.user_id,
                 })
 
+                if (insertError) {
+                    AddNotification({ message: "Hubo un error, inténtalo mas tarde.", title: "Oops!", type: "error", duration: 3000 })
+                    return;
+                }
+
+                if (authUser()?.id === props.user_id) return
+
+                const { error: notificationError } = await supa.from("notifications").insert({
+                    from_id: authUser()?.id,
+                    from_avatar: authUser()?.user_metadata.avatar_url,
+                    title: `${authUser()?.user_metadata.full_name} le agrada tu publicación.`,
+                    to_id: props.user_id,
+                    type: "heart",
+                    post_id: props.id
+                })
+
+                if (notificationError) {
+                    AddNotification({ message: "Hubo un error, inténtalo mas tarde.", title: "Oops!", type: "error", duration: 3000 })
+                    return;
+                }
 
             } catch (err) {
                 console.error("Error inesperado:", err);
@@ -262,6 +283,10 @@ const Post = (props: Props) => {
         }
     }
 
+    const handleReport = () => {
+        openModal({ content: () => <Report {...props} /> })
+    }
+
 
 
     onMount(async () => {
@@ -353,6 +378,11 @@ const Post = (props: Props) => {
                         <Show when={authUser() && authUser()?.id === props.user_id}>
                             <button class="flex items-center gap-2 cursor-pointer text-red-600" onclick={handleDelete}>
                                 <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </Show>
+                        <Show when={authUser()?.id !== props.user_id}>
+                            <button class="flex items-center gap-2 cursor-pointer text-red-600" onclick={handleReport}>
+                                <i class="fa-solid fa-triangle-exclamation"></i>
                             </button>
                         </Show>
                     </section>
