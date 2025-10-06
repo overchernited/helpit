@@ -6,13 +6,13 @@ import { AddNotification } from "~/components/Notifications";
 import { containsBadWords } from "~/lib/badwords";
 import { giveXp } from "~/user/UserHandler";
 
-const MyComment = (props: { post_id: string }) => {
+const MyComment = (props: { post_id: string, user_id: string }) => {
     const [text, setText] = createSignal("");
 
     const createComment = async () => {
         try {
 
-            const { data: insertComment, error: insertCommentError } = await supa.from("comments").insert({
+            const { data, error: insertCommentError } = await supa.from("comments").insert({
                 user_name: authUser()?.user_metadata.full_name,
                 avatar_url: authUser()?.user_metadata.avatar_url,
                 post_id: props.post_id,
@@ -24,15 +24,20 @@ const MyComment = (props: { post_id: string }) => {
                 return
             }
 
-            const { data: updateUser, error: updateUserError } = await supa.auth.updateUser({
-                data: {
-                    comments: (authUser()?.user_metadata.comments ?? 0) + 1
-                }
+            if (authUser()?.id === props.user_id) return
+
+            const { error: notificationError } = await supa.from("notifications").insert({
+                from_id: authUser()?.id,
+                from_avatar: authUser()?.user_metadata.avatar_url,
+                title: `${authUser()?.user_metadata.full_name} ha comentado tu publicación.`,
+                to_id: props.user_id,
+                type: "comment",
+                post_id: props.post_id
             })
 
-            if (updateUserError) {
-                console.error(updateUserError);
-                return
+            if (notificationError) {
+                console.error(notificationError);
+                return;
             }
 
             const { data: getCommentsNumberById, error: getCommentsNumberByIdError } = await supa.from("posts").select("comments_number").eq("id", props.post_id).single();

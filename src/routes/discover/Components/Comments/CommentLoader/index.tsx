@@ -12,7 +12,7 @@ interface CommentProps {
     post_id: string
 }
 
-const CommentLoader = (props: { post_id: string }) => {
+const CommentLoader = (props: { post_id: string, user_id: string }) => {
     const [comments, setComments] = createSignal<CommentProps[]>([]);
 
     const getCommentsById = async () => {
@@ -69,7 +69,7 @@ const CommentLoader = (props: { post_id: string }) => {
 
     return (
         <div class=" w-full flex overflow-y-auto items-center flex-col gap-4">
-            <MyComment post_id={props.post_id} />
+            <MyComment post_id={props.post_id} user_id={props.user_id} />
             <For each={comments()}>
                 {(comment) => <Comment {...comment} />}
             </For>
