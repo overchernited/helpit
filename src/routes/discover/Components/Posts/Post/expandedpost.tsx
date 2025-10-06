@@ -2,6 +2,7 @@ import { twMerge } from "tailwind-merge";
 import ExpandedParagraph from "../ExpandedParagraph";
 import CommentLoader from "../../Comments/CommentLoader";
 import { authUser } from "~/user/UserHandler";
+import { Show } from "solid-js";
 type PostProps = {
     avatar_url: string,
     user_name: string,
@@ -9,6 +10,10 @@ type PostProps = {
     title: string,
     id: string
     user_id: string
+};
+
+type ExpandedPostProps = PostProps & {
+    informative?: boolean;
 };
 
 type CommentProps = {
@@ -20,7 +25,7 @@ type CommentProps = {
 };
 
 
-const ExpandedPost = (props: PostProps) => {
+const ExpandedPost = ({ informative, ...props }: ExpandedPostProps) => {
 
 
     const { title, ...restProps } = props;
@@ -30,7 +35,7 @@ const ExpandedPost = (props: PostProps) => {
     let fontSize = Math.max(12, 24 - length * 0.1);
 
     return (
-        <main class="flex flex-col w-full h-full items-center text-[var(--font-color-alt-2)] mt-2">
+        <main class="flex flex-col w-full h-auto items-center text-[var(--font-color-alt-2)] mt-2">
             <div
                 class=" w-[90%] palette-gradient rounded-md flex flex-col items-center ">
                 <div
@@ -60,10 +65,12 @@ const ExpandedPost = (props: PostProps) => {
 
                 </div>
             </div>
-            <div class="h-auto w-full">
-                <h1 class="text-3xl font-bold">Comentarios</h1>
-                <CommentLoader post_id={props.id} />
-            </div>
+            <Show when={!informative} fallback={<></>}>
+                <div class="h-auto w-full">
+                    <h1 class="text-3xl font-bold">Comentarios</h1>
+                    <CommentLoader post_id={props.id} user_id={props.user_id} />
+                </div>
+            </Show>
         </main >
     )
 }
