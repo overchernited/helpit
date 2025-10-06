@@ -55,7 +55,9 @@ const FirstStep = ((props: { onNext: () => void }) => {
 
     return (
         <>
-            <div
+            <Motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 class=" justify-center md:justify-between flex flex-row w-screen h-screen">
                 <DynamicBackground />
                 <Motion.div
@@ -92,7 +94,7 @@ const FirstStep = ((props: { onNext: () => void }) => {
                     <p class="font-bold text-3xl">De todxs para todxs.</p>
                     <img alt="flubber" height={500} width={500} src="/flubber/flubbersad.gif"></img>
                 </Motion.div>
-            </div>
+            </Motion.div>
         </>
     )
 })
@@ -251,14 +253,14 @@ const ThirdStep = () => {
                                 </For>
                                 <img
                                     loading="lazy"
-                                    class="visible md:hidden w-16 h-16 rounded-2xl palette-gradient p-1"
+                                    class="visible md:hidden w-24 h-24 rounded-2xl palette-gradient p-1"
                                     src={src()}
                                 />
                             </section>
                         </section>
                     </section>
-                    <p class="text-xl font-normal mt-5 text-[var(--font-color-alt)] text-center">Vuelve a ingresar con tu nombre y <span class="text-palette-gradient underline decoration-[var(--color-tertiary)] rounded-2xl p-1">palabras clave</span> o
-                        escanea tu QR.</p>
+                    <p class="text-xl font-normal mt-5 text-[var(--font-color-alt)] text-center">Vuelve a iniciar sesion con tu nombre y <span class="text-palette-gradient underline decoration-[var(--color-tertiary)] rounded-2xl p-1">palabras clave</span> o
+                        escaneando tu QR.</p>
                 </section>
 
                 <div class="hidden md:flex flex-col items-center justify-center gap-5">
