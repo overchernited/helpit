@@ -4,11 +4,12 @@ const filter = new Filter();
 filter.removeWords();
 
 const bannedWords = [
-    'puta', 'mierda', 'idiota', 'pendejo', 'imbécil', 'gil', 'tonto', 'estúpido',
-    "hijueputa", "gonorrea", "malparido", "lampara", "perra",
+    'puta', 'mierda', 'idiota', 'pendejo', 'imbécil', 'gil', 'tonto', 'estúpido', "boludo",
+    "hijueputa", "gonorrea", "malparido", "lampara", "perra", "trava",
     'maricón', 'negro', 'judio', 'musulmán', 'puto', 'zorra', 'maldito', 'sidoso',
     'terrorista', 'nazi', 'racista', 'homofóbico', 'machista', 'machorra', 'feminazi',
-    'odio', 'detesto', 'asco', 'hater', "suicidate", "matate", "cuelgate", "tirate", "disparate",
+    'odio', 'detesto', 'asco', 'hater', "suicidate", "matate", "cuelgate", "tirate", "disparate", 
+    "matese", "suicidese", "cuelgese", "tirese", "disparese", "matese"
 ];
 const variations = bannedWords.flatMap(word => {
     const subs = [
