@@ -51,6 +51,9 @@ const Discover = () => {
     return (
         <>
             <Private endpoint="/">
+                <aside class="text-center w-screen text-[var(--font-color-alt)] text-sm underline">
+                    <a href="https://github.com/overchernited/helpit">https://github.com/overchernited/helpit</a>
+                </aside>
                 <NotificationsButton />
                 <p class="absolute top-0 left-0 text-[var(--font-color-alt)] text-xs m-2 font-extralight">HELPIT V1.0</p>
                 <Navbar />
