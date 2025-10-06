@@ -34,7 +34,7 @@ const Categorie = (Props: CategorieProps) => {
 const Categories = () => {
     return (
         <>
-            <p class="font-regular underline text-xl text-center text-[var(--font-color-alt)] my-2">Categorias</p>
+            <p class="font-normal underline text-xl text-center text-[var(--font-color-alt)] my-2">Categorias</p>
             <div class="flex flex-row gap-2 items-center justify-center flex-wrap w-[100vw] md:w-[40vw]">
                 <Categorie name="Todas" payload="general" />
                 <Categorie name="Discriminación" payload="discrimination" />
