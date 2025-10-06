@@ -1,8 +1,6 @@
 import { modal, closeModal } from "~/store/modal";
 import { Show, onMount, onCleanup } from "solid-js";
 import { Motion, Presence } from "solid-motionone";
-import { twMerge } from "tailwind-merge";
-
 const Modal = () => {
 
     onMount(() => {
@@ -17,16 +15,14 @@ const Modal = () => {
     });
 
     return (
-        <Presence>
-            <Show when={modal().isOpen}>
+        <Presence exitBeforeEnter>
+            <Show when={modal().isOpen} keyed>
                 <Motion.div
                     onclick={(e) => {
                         e.stopPropagation();
                         modal().closeOnForegroundClick && closeModal();
                     }}
-                    class={twMerge(
-                        "fixed z-[1000] bg-white/5 backdrop-blur-md w-screen h-screen flex justify-center items-center"
-                    )}
+                    class={"fixed z-[1000] bg-white/5 backdrop-blur-md w-screen h-screen flex justify-center items-center"}
                 >
                     <Motion.div
                         onclick={(e) => e.stopPropagation()}
