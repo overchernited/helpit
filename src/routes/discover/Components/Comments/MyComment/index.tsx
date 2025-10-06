@@ -40,20 +40,6 @@ const MyComment = (props: { post_id: string, user_id: string }) => {
                 return;
             }
 
-            const { data: getCommentsNumberById, error: getCommentsNumberByIdError } = await supa.from("posts").select("comments_number").eq("id", props.post_id).single();
-
-            if (getCommentsNumberByIdError) {
-                console.error(getCommentsNumberByIdError);
-                return
-            }
-
-            const { error: updateCommentsNumberError } = await supa.from("posts").update({ comments_number: getCommentsNumberById.comments_number + 1 }).eq("id", props.post_id);
-
-            if (updateCommentsNumberError) {
-                console.error(updateCommentsNumberError);
-                return
-            }
-
 
         } catch (err) {
             console.error("Error al crear comentario:", err);
