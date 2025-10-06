@@ -52,7 +52,7 @@ const Discover = () => {
         <>
             <Private endpoint="/">
                 <NotificationsButton />
-                <p class="text-[var(--font-color-alt)] text-xs m-2 font-extralight">HELPIT V1.0</p>
+                <p class="absolute top-0 left-0 text-[var(--font-color-alt)] text-xs m-2 font-extralight">HELPIT V1.0</p>
                 <Navbar />
                 <div class=" flex items-center flex-col my-4 gap-2 bg-[var(--background)]">
                     <SearchBar />
