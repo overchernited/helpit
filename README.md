@@ -67,4 +67,10 @@ psql "postgresql://postgres:postgres@localhost:54322/postgres" -f ./supabase/sch
 
 ```
 
+3. **Iniciar desarrollo**
+
+```
+pnpm run dev
+```
+
 Ya estarias listo para colaborar con helpIt.
