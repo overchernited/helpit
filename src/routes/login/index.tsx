@@ -75,7 +75,7 @@ const Login = () => {
 
                         <form onSubmit={handleSubmit} class="flex items-center w-full md:w-[29vw] flex-col gap-5 my-2 px-5 text-[var(--font-color)]">
                             <div class="w-full">
-                                <label for="username" class="font-medium">Nombre de usuario:</label>
+                                <label for="username" class="font-medium text-[var(--font-color-alt)]">Nombre de usuario:</label>
                                 <Input
                                     placeholder="Ej: flavorousCake28"
                                     value={username}
@@ -83,7 +83,7 @@ const Login = () => {
                                 />
                             </div>
                             <div>
-                                <label for="username" class="font-medium">Palabras clave</label>
+                                <label for="username" class="font-medium text-[var(--font-color-alt)]">Palabras clave</label>
                                 <div class="flex flex-row justify-center items-center gap-2 flex-wrap">
                                     <For each={keywordsSignals()}>
                                         {([keyword, setKeyword], i) => (
