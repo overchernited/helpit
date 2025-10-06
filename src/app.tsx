@@ -14,9 +14,6 @@ export default function App() {
     <Router
       root={props => (
         <>
-          <aside class="text-center w-screen text-[var(--font-color-alt)] text-sm underline">
-            <a href="https://github.com/overchernited/helpit">https://github.com/overchernited/helpit</a>
-          </aside>
           <Theme />
           <UserHandler />
           <Signature />
