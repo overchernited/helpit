@@ -1,9 +1,9 @@
 <img width="2949" height="815" alt="helpit" src="https://github.com/user-attachments/assets/58a16187-1ef2-4daf-9d89-43a3e88a568b" />
 
 ---
+<p align="center">Marlon Hernández & Carlos Rivera</p>
 
 [**HelpIt**](https://helpit-eight.vercel.app) Es nuestra propuesta para la hackathon [HACK4FUTURE SENA](https://formacionprofesional-oit.org/hackathon) en su categoria inclusión y diversidad.
-<p align="center">Marlon Hernández & Carlos Rivera</p>
 
 HelpIt es un foro anonimo de ayuda y orientación mental, en donde las personas pueden contar sus pensamientos y/o desahogarse con el fin de visibilizar sus situaciones y recibir ayuda de otras personas que esten interesadas en hacerlo o esten pasando por algo similar. Facilitando ademas lineas de ayuda y recursos de la salud mental.
 
