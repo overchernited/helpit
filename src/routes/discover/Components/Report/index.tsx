@@ -64,7 +64,7 @@ const Report = (props: PostProps) => {
             <ExpandedPost {...props} informative />"
             <form onSubmit={(e: Event) => handleSubmit(e)} class="w-full h-[60%] flex flex-col items-center gap-5">
                 <h1 class="text-3xl font-bold text-white">¡Ayuda a que HelpIt sea mejor!</h1>
-                <textarea value={inputValue()} class="h-full w-[80%] palette-gradient rounded-2xl p-2 outline-none" onInput={(e) => setInputValue(e.currentTarget.value)} placeholder="¿Qué es lo que quieres reportar?" />
+                <textarea value={inputValue()} class="h-full w-[80%] palette-gradient rounded-2xl p-2 outline-none text-[var(--font-color-alt)]" onInput={(e) => setInputValue(e.currentTarget.value)} placeholder="¿Qué es lo que quieres reportar?" />
                 <Button isLoading={processing()} btnStyle="button-palette" class="w-[10rem] text-3xl" type="submit">Reportar</Button>
             </form>
 
