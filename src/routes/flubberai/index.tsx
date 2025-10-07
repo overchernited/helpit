@@ -95,7 +95,7 @@ const Flubberai = () => {
                                 onInput={(e) => setRequest(e.currentTarget.value)}
                                 value={request()}
                                 disabled={loading()}
-                                class="m-2 w-[80%] text-[var(--font-color)] p-2 rounded-full outline-none font-medium border-2 border-[var(--color-primary)] bg-[var(--background)]"
+                                class="m-2 w-[80%] text-[var(--font-color-alt)] p-2 rounded-full outline-none font-medium border-2 border-[var(--color-primary)] bg-[var(--background)]"
                                 type="text"
                                 placeholder="Pregúntale a Flubber"
                             />
