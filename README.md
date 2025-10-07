@@ -13,11 +13,16 @@ HelpIt es un foro anonimo de ayuda y orientación mental, en donde las personas 
 Este sitio-web multiplataforma añade diferentes caracteristicas en el foro para mitigar la hostilidad que puede presentar la salud mental como:
 
 - ✨ Asistente IA : HelpIt integra a Flubber nuestra mascota virtual que te puede ayudar en cualquier momento dentro de la pagina, enseñando a utilizar la pagina asi como tambien como un consejero. Aunque esta claro que no reemplaza la ayuda psicologica el puede brindar lineas de atencion entre otros recursos.
+  
 - ✨ Anonimato: HelpIt es un foro anonimo con nombres y contraseñas auto-generadas, permitiendo una creacion facil unicamente en 3 pasos. Esto puede librar la opresión de ser conocido permitiendo que las interacciones sean mas espontaneas y autenticas. Ademas de integrar codigos QR con los que se puede iniciar sesión de manera rapida en nuevos dispositivos.
+  
 - ✨ Gamificación: HelpIt integra un sistema de niveles, experencia y logros. Donde por interactuar en el foro eres recompensado generando una sana competencia que a su véz, salva vidas.
+  
 - ✨ Ajustes: HelpIt añade ajustes respecto a la apariencia, tema oscuro, claro y de alto contraste enfocado en las personas con visibilidad reducida.
+  
 - ✨ Interacciones: En helpIt puedes crear publicaciones, comentarios y likes en diferentes categorias que mejor se ajusten a tu pensamiento las cuales impactan directamente en las personas ademas de dar incentivos como experiencia y logros.
-- ✨ Notificaciones: Puedes saber cada vez que entras si has recibido alguna nueva interacción que puede salvarte. 🫂
+  
+- ✨ Notificaciones: Puedes saber cada vez que entras si has recibido alguna nueva interacción que puede salvarte. 🫂  
 
 ---
 
@@ -25,17 +30,18 @@ Este sitio-web multiplataforma añade diferentes caracteristicas en el foro para
 
 Este sitio web ha sido construido sobre las tecnologias mas demandantes del mercado como:
 
-- ⚡**SolidStart**
-- ⚡**Supabase**
-- ⚡**Tailwind**
-- ⚡**SCSS**
-- ⚡**Node.js**
+- ⚡**SolidStart**  
+- ⚡**Supabase**  
+- ⚡**Tailwind**  
+- ⚡**SCSS**  
+- ⚡**Node.js**  
 
 y para el diseño de nuestra propuesta:
 
-- 🖌️Krita
-- 🖌️Blender
-- 🖌️Figma
+- 🖌️**Krita**  
+- 🖌️**Blender**  
+- 🖌️**Figma**  
+- 🖌️**MediBang**  
 
 ---
 
