@@ -37,9 +37,11 @@ const Categories = () => {
             <p class="font-normal underline text-xl text-center text-[var(--font-color-alt)] my-2">Categorias</p>
             <div class="flex flex-row gap-2 items-center justify-center flex-wrap w-[100vw] md:w-[40vw]">
                 <Categorie name="Todas" payload="general" />
+                <Categorie name="Diagnosticos" payload="diagnostics" />
                 <Categorie name="Discriminación" payload="discrimination" />
                 <Categorie name="Discapacidad" payload="disability" />
                 <Categorie name="LGBTQ+" payload="lgbtq" />
+                <Categorie name="Neurodiversidad" payload="neurodiversity" />
                 <Categorie name="Emergencia" payload="emergency" />
                 <Categorie name="Anecdotas" payload="anecdotes" />
                 <Categorie name="Desahogo" payload="relief" />
